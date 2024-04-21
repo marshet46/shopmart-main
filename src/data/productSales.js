@@ -14,7 +14,7 @@ export const productSalesColumns = [
   {
     accessorKey: "amount", //normal accessorKey
     header: "Amount",
-    Cell: ({ cell }) => <span>${cell.getValue()}</span>,
+    Cell: ({ cell }) => <span>ETB{cell.getValue()}</span>,
   },
   {
     accessorKey: "status",

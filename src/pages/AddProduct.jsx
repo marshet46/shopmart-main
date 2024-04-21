@@ -1,29 +1,42 @@
-import styled from "@emotion/styled";
+import React, { useRef, useState } from "react";
 import {
-  Autocomplete,
   Box,
   Button,
-  Chip,
-  FormControl,
-  InputLabel,
-  MenuItem,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Paper,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
-import { categories } from "../data/categories";
 import { BiImageAdd } from "react-icons/bi";
+import styled from "@emotion/styled";
 
 const AddProduct = () => {
-  const [category, setCategory] = useState("");
+  const [formData, setFormData] = useState({
+    account_no: "",
+    entity_name: "",
+    account_holder_name: "",
+  });
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogContent, setDialogContent] = useState("");
   const imageInput = useRef(null);
   const [image, setImage] = useState("");
 
-  const handleChange = (event) => {
-    setCategory(event.target.value);
-    console.log(category);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
   };
 
   const UploadBox = styled(Box)({
@@ -39,11 +52,54 @@ const AddProduct = () => {
     borderColor: "divider",
   });
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccessMessage("");
+
+    try {
+      const response = await fetch("https://aksion.vpsolutions.et/api/v1/accounts", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer 85|iFvyuUIeJvvGNMNerwOgcJUKfw2d7QzSy7gubmqO1ccfbd1c",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+
+      const responseData = await response.json();
+      setSuccessMessage("Deposit Account has Created successfully!");
+      setDialogContent(responseData.message);
+      setOpenDialog(true);
+      setFormData({
+        account_no: "",
+        entity_name: "",
+        account_holder_name: "",
+      });
+    } catch (error) {
+      setError(error.message);
+      alert(error.message);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   return (
     <Box sx={{ pt: "80px", pb: "20px" }}>
       <Typography variant="h6" sx={{ marginBottom: "14px" }}>
-        Add Product
+        Create Depsit account
       </Typography>
+
+      {error && <div style={{ color: "red" }}>{error}</div>}
+          {successMessage && <div style={{ color: "green" }}>{successMessage}</div>}
       <Paper
         sx={{
           boxShadow: "none !important",
@@ -58,140 +114,85 @@ const AddProduct = () => {
           overflow: "hidden",
         }}
       >
-        <Box sx={{ my: 2 }}>
-          <TextField
-            label="Product Name"
-            variant="outlined"
-            size="small"
-            fullWidth
-          />
-        </Box>
-        <Box sx={{ mt: 4 }}>
-          <TextField
-            label="Product Description"
-            variant="outlined"
-            rows={4}
-            fullWidth
-            multiline
-          />
-        </Box>
-        <Box sx={{ mt: 4 }}>
-          <FormControl fullWidth size="small">
-            <InputLabel id="demo-simple-select-label">Category</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="Category"
-              value={category}
+        <form onSubmit={handleSubmit}>
+          <Box sx={{ my: 2 }}>
+            <TextField
+              label="Account Number"
+              variant="outlined"
+              size="small"
+              fullWidth
+              name="account_no"
+              value={formData.account_no}
               onChange={handleChange}
-            >
-              {categories?.map(({ category_id, name }) => (
-                <MenuItem value={name} key={category_id}>
-                  {name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-
-        <Box>
-          <Autocomplete
-            sx={{ mt: 4 }}
-            multiple
-            id="tags-filled"
-            options={categories.map((option) => option.name)}
-            defaultValue={[categories[0].name, categories[3].name]}
-            freeSolo
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                <Chip
-                  variant="standard"
-                  label={option}
-                  {...getTagProps({ index })}
-                />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                helperText="Select a tag or type any tag and press enter"
-                variant="outlined"
-                label="Product Tags"
-                placeholder="Product Tags"
-              />
-            )}
-          />
-        </Box>
-
-        <Box sx={{ mt: 4 }}>
-          <TextField
-            label="Brand"
-            variant="outlined"
-            rows={4}
-            size="small"
-            fullWidth
-          />
-        </Box>
-
-        <Box sx={{ mt: 4, display: "flex", alignItems: "center", gap: 4 }}>
-          <TextField
-            label="Price"
-            variant="outlined"
-            rows={4}
-            fullWidth
-            size="small"
-            defaultValue={"$234.24"}
-          />
-          <TextField
-            label="Discount"
-            variant="outlined"
-            rows={4}
-            fullWidth
-            size="small"
-            defaultValue={"20%"}
-          />
-        </Box>
-        <input
-          type="file"
-          hidden
-          ref={imageInput}
-          onChange={(e) => setImage(e.target.files[0])}
-        />
-        <UploadBox onClick={() => imageInput.current.click()}>
-          {image ? (
-            <img
-              src={image && URL.createObjectURL(image)}
-              alt=""
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
             />
-          ) : (
-            <Box sx={{ textAlign: "center" }}>
-              <BiImageAdd style={{ fontSize: "50px", color: "#027edd" }} />
-              <Typography>
-                Drop your image here or{" "}
-                <span style={{ color: "#027edd", cursor: "pointer" }}>
-                  browse
-                </span>
-              </Typography>
-              <Typography sx={{ fontSize: "12px" }}>
-                JPG, PNG and GIF images are allowed
-              </Typography>
-            </Box>
-          )}
-        </UploadBox>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            mt: "30px",
-          }}
-        >
-          <Button variant="contained" sx={{ borderRadius: "20px" }}>
-            Submit
-          </Button>
-        </Box>
+          </Box>
+          <Box sx={{ mt: 4 }}>
+            <TextField
+              label="Entity Name"
+              variant="outlined"
+              size="small"
+              fullWidth
+              name="entity_name"
+              value={formData.entity_name}
+              onChange={handleChange}
+            />
+          </Box>
+          <Box sx={{ mt: 4 }}>
+            <TextField
+              label="Account Holder Name"
+              variant="outlined"
+              size="small"
+              fullWidth
+              name="account_holder_name"
+              value={formData.account_holder_name}
+              onChange={handleChange}
+            />
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              mt: "30px",
+            }}
+          >
+            <Button variant="contained" type="submit" sx={{ borderRadius: "20px" }}>
+              Create Deposit Account
+            </Button>
+          </Box>
+        </form>
       </Paper>
+      <Dialog
+  open={openDialog}
+  onClose={handleCloseDialog}
+  maxWidth="sm"
+  fullWidth
+  PaperProps={{
+    sx: {
+      maxHeight: "90vh", // Set the maximum height to 80% of the viewport height
+    },
+  }}
+>
+  <DialogTitle
+    sx={{
+      backgroundColor: "#027edd", // Change background color
+      color: "white", // Change text color
+      textAlign: "center", // Center align text
+    }}
+  >
+    Depost Account has created successfully
+  </DialogTitle>
+  <DialogContent>
+    <DialogContentText>{dialogContent}</DialogContentText>
+  </DialogContent>
+  <DialogActions sx={{ justifyContent: "center" }}>
+    <Button onClick={handleCloseDialog} variant="contained">
+      Close
+    </Button>
+  </DialogActions>
+</Dialog>
+
     </Box>
   );
 };

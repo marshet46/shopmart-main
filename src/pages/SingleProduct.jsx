@@ -41,9 +41,9 @@ const SingleProduct = () => {
                   fontSize: "13px",
                 }}
               >
-                $1829
+                ETB1829
               </span>{" "}
-              ${price}
+              ETB{price}
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 4, my: 2 }}>
               <Typography variant="subtitle2">284 customer reviews</Typography>

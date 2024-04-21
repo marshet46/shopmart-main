@@ -243,7 +243,7 @@ const SingleProduct = () => {
             >
               <Typography variant="subtitle2">Subtotal</Typography>
               <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>
-                $7,523
+                ETB7,523
               </Typography>
             </Box>
             <Box
@@ -257,7 +257,7 @@ const SingleProduct = () => {
             >
               <Typography variant="subtitle2">Tax(20%)</Typography>
               <Typography variant="subtitle2" sx={{ opacity: 0.8 }}>
-                $245
+                ETB245
               </Typography>
             </Box>
             <Box
@@ -285,7 +285,7 @@ const SingleProduct = () => {
             >
               <Typography variant="h6">Total</Typography>
               <Typography variant="h6" sx={{ opacity: 0.8 }}>
-                $8,532
+                ETB8,532
               </Typography>
             </Box>
           </Box>

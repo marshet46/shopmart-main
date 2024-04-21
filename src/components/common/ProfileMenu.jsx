@@ -32,7 +32,7 @@ const ProfileMenu = () => {
         >
           <Avatar
             sx={{ width: 32, height: 32 }}
-            src="/images/avatars/profile-avatar.png"
+            src=""
           />
         </IconButton>
       </Tooltip>

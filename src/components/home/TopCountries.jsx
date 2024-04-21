@@ -5,7 +5,7 @@ import { countriesData } from "../../data/TopCountries";
 const TopCountries = () => {
   return (
     <Box sx={{ padding: "15px" }}>
-      <Typography variant="h5">Top Countries</Typography>
+      <Typography variant="h5">Top s</Typography>
       <Typography sx={{ fontSize: "12px", opacity: 0.7 }}>
         Sales perfomance by country
       </Typography>
@@ -24,7 +24,7 @@ const TopCountries = () => {
               <Typography>{name}</Typography>
             </Stack>
             <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>
-              ${amount}
+              ETB{amount}
             </Typography>
           </Stack>
         ))}

@@ -18,19 +18,19 @@ export const links = [
     url: "/",
   },
   {
-    name: "Products",
+    name: "Desposit Accounts",
     icon: <FiShoppingBag />,
     subLinks: [
       {
-        name: "All Products",
+        name: "All Accounts",
         url: "/products",
       },
       {
-        name: "Add Product",
+        name: "Add deposit account",
         url: "/products/add",
       },
       {
-        name: "Product Category",
+        name: "Deposit Category",
         url: "/products/categories",
       },
     ],

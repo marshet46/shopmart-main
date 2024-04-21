@@ -39,7 +39,7 @@ const Stats = () => {
                   {icon}
                 </IconButton>
                 <Typography variant="h4" sx={{ my: 2 }}>
-                  {`${isMoney ? "$" + amount : amount}`}
+                  {`${isMoney ? "Birr " + amount : amount}`}
                 </Typography>
                 <Typography sx={{ opacity: 0.7 }}>{title}</Typography>
               </Box>

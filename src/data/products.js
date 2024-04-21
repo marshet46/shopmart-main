@@ -24,7 +24,7 @@ export const productsColumns = [
   {
     accessorKey: "price",
     header: "Price",
-    Cell: ({ cell }) => <span>${cell.getValue()}</span>,
+    Cell: ({ cell }) => <span>ETB{cell.getValue()}</span>,
   },
   {
     accessorKey: "instock",
