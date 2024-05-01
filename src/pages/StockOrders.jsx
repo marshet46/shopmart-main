@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCompanies, fetchCompanyById, deleteCompany, updateCompany, addCompany, setSelectedCompany } from '../redux/slice/companySlice';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, TablePagination, TableSortLabel, Button, Modal, FormControl, InputLabel, Input, FormHelperText, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from '@mui/material';
+import { fetchOrders, fetchOrderById, deleteOrder, updateOrder, addOrder, setSelectedOrder } from '../redux/slice/OrderSlice';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, TablePagination, TableSortLabel, Button, Modal, FormControl, InputLabel, Input, FormHelperText, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar,MenuItem, Select } from '@mui/material';
 import { FiEye, FiTrash } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-
+ 
 const Orders = () => {
 
   const dispatch = useDispatch();
-  const [selectedCompany, setSelectedCompanyState] = useState({
-    name: '',
-    ticker: '',
-    sector: '',
-    industry: '',
+  const [selectedOrder, setSelectedOrderState] = useState({
+    symbol: '',
+    price: '',
+    quantity: '',
+    status: '',
     description: ''
   });
   const [editMode, setEditMode] = useState(false);
@@ -26,53 +26,53 @@ const Orders = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const companies = useSelector((state) => state.companies.companies);
-  const selectedCompanyState = useSelector((state) => state.companies.selectedCompany);
-  const status = useSelector((state) => state.companies.status);
-  const error = useSelector((state) => state.companies.error);
+  const orders = useSelector((state) => state.orders.orders);
+  const selectedOrderState = useSelector((state) => state.orders.selectedOrder);
+  const status = useSelector((state) => state.orders.status);
+  const error = useSelector((state) => state.orders.error);
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchCompanies());
+      dispatch(fetchOrders());
     }
   }, [status, dispatch]);
 
   useEffect(() => {
-    if (selectedCompanyState) {
-      setSelectedCompanyState(selectedCompanyState);
+    if (selectedOrderState) {
+      setSelectedOrderState(selectedOrderState);
       setEditMode(false);
     }
-  }, [selectedCompanyState]);
+  }, [selectedOrderState]);
 
   const handleDelete = (id) => {
     setDeleteDialogOpen(true);
-    setSelectedCompanyState(id);
+    setSelectedOrderState(id);
   };
 
   const confirmDelete = () => {
-    dispatch(deleteCompany(selectedCompany));
+    dispatch(deleteOrder(selectedOrder));
     setDeleteDialogOpen(false);
   };
 
-  const handleEdit = (company) => {
-    dispatch(setSelectedCompany(company));
+  const handleEdit = (order) => {
+    dispatch(setSelectedOrder(order));
     setEditMode(true);
   };
 
   const handleSave = () => {
-    dispatch(updateCompany(selectedCompany));
+    dispatch(updateOrder(selectedOrder));
     setEditMode(false);
     setSnackbarOpen(true);
-    setSnackbarMessage('Company updated successfully');
+    setSnackbarMessage('Order updated successfully');
   };
 
   const handleCancel = () => {
     setEditMode(false);
-    dispatch(setSelectedCompany(null));
+    dispatch(setSelectedOrder(null));
   };
 
   const handleViewDetail = (id) => {
-    dispatch(fetchCompanyById(id));
+    dispatch(fetchOrderById(id));
     setViewDetailModalOpen(true);
   };
 
@@ -81,10 +81,10 @@ const Orders = () => {
   };
 
   const handleRegisterSave = () => {
-    dispatch(addCompany(selectedCompany));
+    dispatch(addOrder(selectedOrder));
     setRegistrationMode(false);
     setSnackbarOpen(true);
-    setSnackbarMessage('Company registered successfully');
+    setSnackbarMessage('Order registered successfully');
   };
 
   const handleRegisterCancel = () => {
@@ -96,22 +96,22 @@ const Orders = () => {
     setPage(0); // Reset page to first page when searching
   };
 
-  const sortCompanies = (columnId) => {
+  const sortOrders = (columnId) => {
     const isAsc = sortColumn === columnId && sortDirection === 'asc';
     setSortDirection(isAsc ? 'desc' : 'asc');
     setSortColumn(columnId);
   };
 
-  const filteredCompanies = companies.filter(company =>
-    company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    company.ticker.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredOrders = orders.filter(order =>
+    order.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.price.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const sortedCompanies = filteredCompanies.slice().sort((a, b) => {
-    if (sortColumn === 'name') {
-      return sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
-    } else if (sortColumn === 'ticker') {
-      return sortDirection === 'asc' ? a.ticker.localeCompare(b.ticker) : b.ticker.localeCompare(a.ticker);
+  const sortedOrders = filteredOrders.slice().sort((a, b) => {
+    if (sortColumn === 'symbol') {
+      return sortDirection === 'asc' ? a.symbol.localeCompare(b.symbol) : b.symbol.localeCompare(a.symbol);
+    } else if (sortColumn === 'price') {
+      return sortDirection === 'asc' ? a.price.localeCompare(b.price) : b.price.localeCompare(a.price);
     }
     return 0;
   });
@@ -139,52 +139,80 @@ const Orders = () => {
 
   return (
     <div>
-      <h1>Company List</h1>
-      <Button variant="contained" onClick={handleRegister}>Register New Company</Button>
+      <h1>Order List</h1>
+      <Button variant="contained" onClick={handleRegister}>Register New Order</Button>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'name'}
+                  active={sortColumn === 'symbol'}
                   direction={sortDirection}
-                  onClick={() => sortCompanies('name')}
+                  onClick={() => sortOrders('symbol')}
                 >
-                  Name
+                  Symbol
                 </TableSortLabel>
               </TableCell>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'ticker'}
+                  active={sortColumn === 'price'}
                   direction={sortDirection}
-                  onClick={() => sortCompanies('ticker')}
+                  onClick={() => sortOrders('price')}
                 >
-                  Ticker
+                  CurrentPrice
                 </TableSortLabel>
+                
               </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'quantity'}
+                  direction={sortDirection}
+                  onClick={() => sortOrders('quantity')}
+                >
+                  quantity
+                </TableSortLabel>
+                
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'status'}
+                  direction={sortDirection}
+                  onClick={() => sortOrders('status')}
+                >
+                  status
+                </TableSortLabel>
+                
+              </TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>phone</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedCompanies
+            {sortedOrders
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((company) => (
-                <TableRow key={company.id}>
-                  <TableCell>{company.name}</TableCell>
-                  <TableCell>{company.ticker}</TableCell>
+              .map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell>{order.symbol}</TableCell>
+                  <TableCell>{order.price}</TableCell>
+                  <TableCell>{order.quantity}</TableCell>
+                  <TableCell>{order.status}</TableCell>
+                  <TableCell>{order.User.name}</TableCell>
+                  <TableCell>{order.User.phone}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleEdit(company)}>
+                    <IconButton onClick={() => handleEdit(order)}>
                       <Tooltip title="Edit">
                         <FiEye />
                       </Tooltip>
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(company.id)}>
+                    <IconButton onClick={() => handleDelete(order.id)}>
                       <Tooltip title="Delete">
                         <FiTrash />
                       </Tooltip>
                     </IconButton>
-                    <Button onClick={() => handleViewDetail(company.id)}>View Detail</Button>
+                    <Button onClick={() => handleViewDetail(order.id)}>View Detail</Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -194,7 +222,7 @@ const Orders = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={filteredCompanies.length}
+        count={filteredOrders.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -204,39 +232,46 @@ const Orders = () => {
         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '400px', margin: 'auto' }}>
           {editMode && (
             <div>
-              <h2>Edit Company</h2>
+              <h2>Edit Order</h2>
               <TextField
-                label="Name"
-                value={selectedCompany.name}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, name: e.target.value })}
+                label="Symbol"
+                value={selectedOrder.symbol}
+                onChange={(e) => setSelectedOrderState({ ...selectedOrder, symbol: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Ticker"
-                value={selectedCompany.ticker}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, ticker: e.target.value })}
+                label="CurrentPrice"
+                value={selectedOrder.price}
+                onChange={(e) => setSelectedOrderState({ ...selectedOrder, price: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Sector"
-                value={selectedCompany.sector}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, sector: e.target.value })}
+                label="quantity"
+                value={selectedOrder.quantity}
+                onChange={(e) => setSelectedOrderState({ ...selectedOrder, quantity: e.target.value })}
                 fullWidth
                 margin="normal"
               />
-              <TextField
-                label="Industry"
-                value={selectedCompany.industry}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, industry: e.target.value })}
-                fullWidth
-                margin="normal"
-              />
+             <FormControl fullWidth margin="normal">
+  <InputLabel id="status-label">Status</InputLabel>
+  <Select
+    labelId="status-label"
+    id="status"
+    value={selectedOrder.status}
+    onChange={(e) => setSelectedOrderState({ ...selectedOrder, status: e.target.value })}
+    label="Status"
+  >
+    <MenuItem value="approved">Approved</MenuItem>
+    <MenuItem value="rejected">Rejected</MenuItem>
+    <MenuItem value="pending">pending</MenuItem>
+  </Select>
+</FormControl>
               <TextField
                 label="Description"
-                value={selectedCompany.description}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, description: e.target.value })}
+                value={selectedOrder.description}
+                onChange={(e) => setSelectedOrderState({ ...selectedOrder, description: e.target.value })}
                 fullWidth
                 margin="normal"
                 multiline
@@ -247,39 +282,39 @@ const Orders = () => {
           )}
           {registrationMode && (
             <div>
-              <h2>Register New Company</h2>
+              <h2>Add New Order</h2>
               <TextField
-                label="Company Name"
-                value={selectedCompany.name}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, name: e.target.value })}
+                label="Order Symbol"
+                value={selectedOrder.symbol}
+                onChange={(e) => setSelectedOrderState({ ...selectedOrder, symbol: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Company Ticker"
-                value={selectedCompany.ticker}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, ticker: e.target.value })}
+                label="Order CurrentPrice"
+                value={selectedOrder.price}
+                onChange={(e) => setSelectedOrderState({ ...selectedOrder, price: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Sector"
-                value={selectedCompany.sector}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, sector: e.target.value })}
+                label="quantity"
+                value={selectedOrder.quantity}
+                onChange={(e) => setSelectedOrderState({ ...selectedOrder, quantity: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Industry"
-                value={selectedCompany.industry}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, industry: e.target.value })}
+                label="status"
+                value={selectedOrder.status}
+                onChange={(e) => setSelectedOrderState({ ...selectedOrder, status: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
                 label="Description"
-                value={selectedCompany.description}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, description: e.target.value })}
+                value={selectedOrder.description}
+                onChange={(e) => setSelectedOrderState({ ...selectedOrder, description: e.target.value })}
                 fullWidth
                 margin="normal"
                 multiline
@@ -291,10 +326,10 @@ const Orders = () => {
         </div>
       </Modal>
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-        <DialogTitle>Delete Company</DialogTitle>
+        <DialogTitle>Delete Order</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this company?
+            Are you sure you want to delete this order?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -303,14 +338,14 @@ const Orders = () => {
         </DialogActions>
       </Dialog>
       <Dialog open={viewDetailModalOpen} onClose={() => setViewDetailModalOpen(false)}>
-        <DialogTitle>Company Details</DialogTitle>
+        <DialogTitle>Order Details</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p>Name: {selectedCompanyState?.name}</p>
-            <p>Ticker: {selectedCompanyState?.ticker}</p>
-            <p>Sector: {selectedCompanyState?.sector}</p>
-            <p>Industry: {selectedCompanyState?.industry}</p>
-            <p>Description: {selectedCompanyState?.description}</p>
+            <p>Symbol: {selectedOrderState?.symbol}</p>
+            <p>CurrentPrice: {selectedOrderState?.price}</p>
+            <p>quantity: {selectedOrderState?.quantity}</p>
+            <p>status: {selectedOrderState?.status}</p>
+            <p>Description: {selectedOrderState?.description}</p>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

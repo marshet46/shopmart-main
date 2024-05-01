@@ -1,19 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router } from "react-router-dom";
-import "./styles/index.css";
-import App from "./App";
-import { ThemeToggleProvider } from "./contexts/ThemeContext";
-import { CssBaseline } from "@mui/material";
+// src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux'; // Import Provider
+import store from './redux/store'; // Import your Redux store
+import App from './App';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <ThemeToggleProvider>
-      <CssBaseline />
-      <Router>
-        <App />
-      </Router>
-    </ThemeToggleProvider>
-  </React.StrictMode>
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
 );

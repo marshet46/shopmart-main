@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCompanies, fetchCompanyById, deleteCompany, updateCompany, addCompany, setSelectedCompany } from '../redux/slice/companySlice';
+import { fetchNewss, fetchNewsById, deleteNews, updateNews, addNews, setSelectedNews } from '../redux/slice/newsSlice';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, TablePagination, TableSortLabel, Button, Modal, FormControl, InputLabel, Input, FormHelperText, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from '@mui/material';
 import { FiEye, FiTrash } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-
-const Orders = () => {
+ 
+const Newss = () => {
 
   const dispatch = useDispatch();
-  const [selectedCompany, setSelectedCompanyState] = useState({
-    name: '',
-    ticker: '',
-    sector: '',
-    industry: '',
-    description: ''
+  const [selectedNews, setSelectedNewsState] = useState({
+    title: '',
+    content: '',
+    author: '',
+    publishedAt: '',
+  
   });
   const [editMode, setEditMode] = useState(false);
   const [registrationMode, setRegistrationMode] = useState(false);
@@ -26,53 +26,53 @@ const Orders = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const companies = useSelector((state) => state.companies.companies);
-  const selectedCompanyState = useSelector((state) => state.companies.selectedCompany);
-  const status = useSelector((state) => state.companies.status);
-  const error = useSelector((state) => state.companies.error);
+  const newss = useSelector((state) => state.news.newss);
+  const selectedNewsState = useSelector((state) => state.news.selectedNews);
+  const status = useSelector((state) => state.news.status);
+  const error = useSelector((state) => state.news.error);
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchCompanies());
+      dispatch(fetchNewss());
     }
   }, [status, dispatch]);
 
   useEffect(() => {
-    if (selectedCompanyState) {
-      setSelectedCompanyState(selectedCompanyState);
+    if (selectedNewsState) {
+      setSelectedNewsState(selectedNewsState);
       setEditMode(false);
     }
-  }, [selectedCompanyState]);
+  }, [selectedNewsState]);
 
   const handleDelete = (id) => {
     setDeleteDialogOpen(true);
-    setSelectedCompanyState(id);
+    setSelectedNewsState(id);
   };
 
   const confirmDelete = () => {
-    dispatch(deleteCompany(selectedCompany));
+    dispatch(deleteNews(selectedNews));
     setDeleteDialogOpen(false);
   };
 
-  const handleEdit = (company) => {
-    dispatch(setSelectedCompany(company));
+  const handleEdit = (news) => {
+    dispatch(setSelectedNews(news));
     setEditMode(true);
   };
 
   const handleSave = () => {
-    dispatch(updateCompany(selectedCompany));
+    dispatch(updateNews(selectedNews));
     setEditMode(false);
     setSnackbarOpen(true);
-    setSnackbarMessage('Company updated successfully');
+    setSnackbarMessage('News updated successfully');
   };
 
   const handleCancel = () => {
     setEditMode(false);
-    dispatch(setSelectedCompany(null));
+    dispatch(setSelectedNews(null));
   };
 
   const handleViewDetail = (id) => {
-    dispatch(fetchCompanyById(id));
+    dispatch(fetchNewsById(id));
     setViewDetailModalOpen(true);
   };
 
@@ -81,10 +81,10 @@ const Orders = () => {
   };
 
   const handleRegisterSave = () => {
-    dispatch(addCompany(selectedCompany));
+    dispatch(addNews(selectedNews));
     setRegistrationMode(false);
     setSnackbarOpen(true);
-    setSnackbarMessage('Company registered successfully');
+    setSnackbarMessage('News registered successfully');
   };
 
   const handleRegisterCancel = () => {
@@ -96,22 +96,22 @@ const Orders = () => {
     setPage(0); // Reset page to first page when searching
   };
 
-  const sortCompanies = (columnId) => {
+  const sortNewss = (columnId) => {
     const isAsc = sortColumn === columnId && sortDirection === 'asc';
     setSortDirection(isAsc ? 'desc' : 'asc');
     setSortColumn(columnId);
   };
 
-  const filteredCompanies = companies.filter(company =>
-    company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    company.ticker.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredNewss = newss.filter(news =>
+    news.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    news.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const sortedCompanies = filteredCompanies.slice().sort((a, b) => {
-    if (sortColumn === 'name') {
-      return sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
-    } else if (sortColumn === 'ticker') {
-      return sortDirection === 'asc' ? a.ticker.localeCompare(b.ticker) : b.ticker.localeCompare(a.ticker);
+  const sortedNewss = filteredNewss.slice().sort((a, b) => {
+    if (sortColumn === 'title') {
+      return sortDirection === 'asc' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title);
+    } else if (sortColumn === 'content') {
+      return sortDirection === 'asc' ? a.content.localeCompare(b.content) : b.content.localeCompare(a.content);
     }
     return 0;
   });
@@ -139,52 +139,77 @@ const Orders = () => {
 
   return (
     <div>
-      <h1>Company List</h1>
-      <Button variant="contained" onClick={handleRegister}>Register New Company</Button>
+      <h1>News List</h1>
+      <Button variant="contained" onClick={handleRegister}>Register New News</Button>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'name'}
+                  active={sortColumn === 'title'}
                   direction={sortDirection}
-                  onClick={() => sortCompanies('name')}
+                  onClick={() => sortNewss('title')}
                 >
-                  Name
+                  Title
                 </TableSortLabel>
               </TableCell>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'ticker'}
+                  active={sortColumn === 'content'}
                   direction={sortDirection}
-                  onClick={() => sortCompanies('ticker')}
+                  onClick={() => sortNewss('content')}
                 >
-                  Ticker
+                  Content
                 </TableSortLabel>
+                
               </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'author'}
+                  direction={sortDirection}
+                  onClick={() => sortNewss('author')}
+                >
+                  MarketCap
+                </TableSortLabel>
+                
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'publishedAt'}
+                  direction={sortDirection}
+                  onClick={() => sortNewss('publishedAt')}
+                >
+                  publishedAt
+                </TableSortLabel>
+                
+              </TableCell>
+              
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedCompanies
+            {sortedNewss
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((company) => (
-                <TableRow key={company.id}>
-                  <TableCell>{company.name}</TableCell>
-                  <TableCell>{company.ticker}</TableCell>
+              .map((news) => (
+                <TableRow key={news.id}>
+                  <TableCell>{news.title}</TableCell>
+                  <TableCell>{news.content}</TableCell>
+                  <TableCell>{news.author}</TableCell>
+                  <TableCell>{news.publishedAt}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleEdit(company)}>
+                    <IconButton onClick={() => handleEdit(news)}>
                       <Tooltip title="Edit">
                         <FiEye />
                       </Tooltip>
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(company.id)}>
+                    <IconButton onClick={() => handleDelete(news.id)}>
                       <Tooltip title="Delete">
                         <FiTrash />
                       </Tooltip>
                     </IconButton>
-                    <Button onClick={() => handleViewDetail(company.id)}>View Detail</Button>
+                    <Button onClick={() => handleViewDetail(news.id)}>View Detail</Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -194,7 +219,7 @@ const Orders = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={filteredCompanies.length}
+        count={filteredNewss.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -204,86 +229,72 @@ const Orders = () => {
         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '400px', margin: 'auto' }}>
           {editMode && (
             <div>
-              <h2>Edit Company</h2>
+              <h2>Edit News</h2>
               <TextField
-                label="Name"
-                value={selectedCompany.name}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, name: e.target.value })}
+                label="Title"
+                value={selectedNews.title}
+                onChange={(e) => setSelectedNewsState({ ...selectedNews, title: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Ticker"
-                value={selectedCompany.ticker}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, ticker: e.target.value })}
+                label="Content"
+                value={selectedNews.content}
+                onChange={(e) => setSelectedNewsState({ ...selectedNews, content: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Sector"
-                value={selectedCompany.sector}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, sector: e.target.value })}
+                label="author"
+                value={selectedNews.author}
+                onChange={(e) => setSelectedNewsState({ ...selectedNews, author: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Industry"
-                value={selectedCompany.industry}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, industry: e.target.value })}
+                label="Date"
+                value={selectedNews.publishedAt}
+                onChange={(e) => setSelectedNewsState({ ...selectedNews, publishedAt: e.target.value })}
                 fullWidth
                 margin="normal"
               />
-              <TextField
-                label="Description"
-                value={selectedCompany.description}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, description: e.target.value })}
-                fullWidth
-                margin="normal"
-                multiline
-              />
+              
               <Button onClick={handleSave} variant="contained" color="primary" style={{ marginRight: '10px' }}>Save</Button>
               <Button onClick={handleCancel} variant="contained" color="secondary">Cancel</Button>
             </div>
           )}
           {registrationMode && (
             <div>
-              <h2>Register New Company</h2>
+              <h2>Register New News</h2>
               <TextField
-                label="Company Name"
-                value={selectedCompany.name}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, name: e.target.value })}
+                label="News Title"
+                value={selectedNews.title}
+                onChange={(e) => setSelectedNewsState({ ...selectedNews, title: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Company Ticker"
-                value={selectedCompany.ticker}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, ticker: e.target.value })}
+                label="News Content"
+                value={selectedNews.content}
+                onChange={(e) => setSelectedNewsState({ ...selectedNews, content: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Sector"
-                value={selectedCompany.sector}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, sector: e.target.value })}
+                label="author"
+                value={selectedNews.author}
+                onChange={(e) => setSelectedNewsState({ ...selectedNews, author: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Industry"
-                value={selectedCompany.industry}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, industry: e.target.value })}
+                label="date"
+                value={selectedNews.publishedAt}
+                onChange={(e) => setSelectedNewsState({ ...selectedNews, publishedAt: e.target.value })}
                 fullWidth
                 margin="normal"
               />
-              <TextField
-                label="Description"
-                value={selectedCompany.description}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, description: e.target.value })}
-                fullWidth
-                margin="normal"
-                multiline
-              />
+             
               <Button onClick={handleRegisterSave} variant="contained" color="primary" style={{ marginRight: '10px' }}>Save</Button>
               <Button onClick={handleRegisterCancel} variant="contained" color="secondary">Cancel</Button>
             </div>
@@ -291,10 +302,10 @@ const Orders = () => {
         </div>
       </Modal>
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-        <DialogTitle>Delete Company</DialogTitle>
+        <DialogTitle>Delete News</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this company?
+            Are you sure you want to delete this news?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -303,14 +314,14 @@ const Orders = () => {
         </DialogActions>
       </Dialog>
       <Dialog open={viewDetailModalOpen} onClose={() => setViewDetailModalOpen(false)}>
-        <DialogTitle>Company Details</DialogTitle>
+        <DialogTitle>News Details</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p>Name: {selectedCompanyState?.name}</p>
-            <p>Ticker: {selectedCompanyState?.ticker}</p>
-            <p>Sector: {selectedCompanyState?.sector}</p>
-            <p>Industry: {selectedCompanyState?.industry}</p>
-            <p>Description: {selectedCompanyState?.description}</p>
+            <p>Title: {selectedNewsState?.title}</p>
+            <p>Content: {selectedNewsState?.content}</p>
+            <p>author: {selectedNewsState?.author}</p>
+            <p>Date: {selectedNewsState?.publishedAt}</p>
+        
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -329,4 +340,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Newss;

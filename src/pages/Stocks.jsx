@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCompanies, fetchCompanyById, deleteCompany, updateCompany, addCompany, setSelectedCompany } from '../redux/slice/companySlice';
+import { fetchStocks, fetchStockById, deleteStock, updateStock, addStock, setSelectedStock } from '../redux/slice/stockSlice';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, TablePagination, TableSortLabel, Button, Modal, FormControl, InputLabel, Input, FormHelperText, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from '@mui/material';
 import { FiEye, FiTrash } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-
-const Orders = () => {
+ 
+const Stocks = () => {
 
   const dispatch = useDispatch();
-  const [selectedCompany, setSelectedCompanyState] = useState({
-    name: '',
-    ticker: '',
-    sector: '',
-    industry: '',
+  const [selectedStock, setSelectedStockState] = useState({
+    symbol: '',
+    currentPrice: '',
+    marketCap: '',
+    dividendYield: '',
     description: ''
   });
   const [editMode, setEditMode] = useState(false);
@@ -26,53 +26,53 @@ const Orders = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const companies = useSelector((state) => state.companies.companies);
-  const selectedCompanyState = useSelector((state) => state.companies.selectedCompany);
-  const status = useSelector((state) => state.companies.status);
-  const error = useSelector((state) => state.companies.error);
+  const stocks = useSelector((state) => state.stocks.stocks);
+  const selectedStockState = useSelector((state) => state.stocks.selectedStock);
+  const status = useSelector((state) => state.stocks.status);
+  const error = useSelector((state) => state.stocks.error);
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchCompanies());
+      dispatch(fetchStocks());
     }
   }, [status, dispatch]);
 
   useEffect(() => {
-    if (selectedCompanyState) {
-      setSelectedCompanyState(selectedCompanyState);
+    if (selectedStockState) {
+      setSelectedStockState(selectedStockState);
       setEditMode(false);
     }
-  }, [selectedCompanyState]);
+  }, [selectedStockState]);
 
   const handleDelete = (id) => {
     setDeleteDialogOpen(true);
-    setSelectedCompanyState(id);
+    setSelectedStockState(id);
   };
 
   const confirmDelete = () => {
-    dispatch(deleteCompany(selectedCompany));
+    dispatch(deleteStock(selectedStock));
     setDeleteDialogOpen(false);
   };
 
-  const handleEdit = (company) => {
-    dispatch(setSelectedCompany(company));
+  const handleEdit = (stock) => {
+    dispatch(setSelectedStock(stock));
     setEditMode(true);
   };
 
   const handleSave = () => {
-    dispatch(updateCompany(selectedCompany));
+    dispatch(updateStock(selectedStock));
     setEditMode(false);
     setSnackbarOpen(true);
-    setSnackbarMessage('Company updated successfully');
+    setSnackbarMessage('Stock updated successfully');
   };
 
   const handleCancel = () => {
     setEditMode(false);
-    dispatch(setSelectedCompany(null));
+    dispatch(setSelectedStock(null));
   };
 
   const handleViewDetail = (id) => {
-    dispatch(fetchCompanyById(id));
+    dispatch(fetchStockById(id));
     setViewDetailModalOpen(true);
   };
 
@@ -81,10 +81,10 @@ const Orders = () => {
   };
 
   const handleRegisterSave = () => {
-    dispatch(addCompany(selectedCompany));
+    dispatch(addStock(selectedStock));
     setRegistrationMode(false);
     setSnackbarOpen(true);
-    setSnackbarMessage('Company registered successfully');
+    setSnackbarMessage('Stock registered successfully');
   };
 
   const handleRegisterCancel = () => {
@@ -96,22 +96,22 @@ const Orders = () => {
     setPage(0); // Reset page to first page when searching
   };
 
-  const sortCompanies = (columnId) => {
+  const sortStocks = (columnId) => {
     const isAsc = sortColumn === columnId && sortDirection === 'asc';
     setSortDirection(isAsc ? 'desc' : 'asc');
     setSortColumn(columnId);
   };
 
-  const filteredCompanies = companies.filter(company =>
-    company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    company.ticker.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredStocks = stocks.filter(stock =>
+    stock.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    stock.currentPrice.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const sortedCompanies = filteredCompanies.slice().sort((a, b) => {
-    if (sortColumn === 'name') {
-      return sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
-    } else if (sortColumn === 'ticker') {
-      return sortDirection === 'asc' ? a.ticker.localeCompare(b.ticker) : b.ticker.localeCompare(a.ticker);
+  const sortedStocks = filteredStocks.slice().sort((a, b) => {
+    if (sortColumn === 'symbol') {
+      return sortDirection === 'asc' ? a.symbol.localeCompare(b.symbol) : b.symbol.localeCompare(a.symbol);
+    } else if (sortColumn === 'currentPrice') {
+      return sortDirection === 'asc' ? a.currentPrice.localeCompare(b.currentPrice) : b.currentPrice.localeCompare(a.currentPrice);
     }
     return 0;
   });
@@ -139,52 +139,77 @@ const Orders = () => {
 
   return (
     <div>
-      <h1>Company List</h1>
-      <Button variant="contained" onClick={handleRegister}>Register New Company</Button>
+      <h1>Stock List</h1>
+      <Button variant="contained" onClick={handleRegister}>Register New Stock</Button>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'name'}
+                  active={sortColumn === 'symbol'}
                   direction={sortDirection}
-                  onClick={() => sortCompanies('name')}
+                  onClick={() => sortStocks('symbol')}
                 >
-                  Name
+                  Symbol
                 </TableSortLabel>
               </TableCell>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'ticker'}
+                  active={sortColumn === 'currentPrice'}
                   direction={sortDirection}
-                  onClick={() => sortCompanies('ticker')}
+                  onClick={() => sortStocks('currentPrice')}
                 >
-                  Ticker
+                  CurrentPrice
                 </TableSortLabel>
+                
               </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'marketCap'}
+                  direction={sortDirection}
+                  onClick={() => sortStocks('marketCap')}
+                >
+                  MarketCap
+                </TableSortLabel>
+                
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'dividendYield'}
+                  direction={sortDirection}
+                  onClick={() => sortStocks('dividendYield')}
+                >
+                  dividendYield
+                </TableSortLabel>
+                
+              </TableCell>
+              
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedCompanies
+            {sortedStocks
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((company) => (
-                <TableRow key={company.id}>
-                  <TableCell>{company.name}</TableCell>
-                  <TableCell>{company.ticker}</TableCell>
+              .map((stock) => (
+                <TableRow key={stock.id}>
+                  <TableCell>{stock.symbol}</TableCell>
+                  <TableCell>{stock.currentPrice}</TableCell>
+                  <TableCell>{stock.marketCap}</TableCell>
+                  <TableCell>{stock.dividendYield}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleEdit(company)}>
+                    <IconButton onClick={() => handleEdit(stock)}>
                       <Tooltip title="Edit">
                         <FiEye />
                       </Tooltip>
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(company.id)}>
+                    <IconButton onClick={() => handleDelete(stock.id)}>
                       <Tooltip title="Delete">
                         <FiTrash />
                       </Tooltip>
                     </IconButton>
-                    <Button onClick={() => handleViewDetail(company.id)}>View Detail</Button>
+                    <Button onClick={() => handleViewDetail(stock.id)}>View Detail</Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -194,7 +219,7 @@ const Orders = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={filteredCompanies.length}
+        count={filteredStocks.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -204,39 +229,39 @@ const Orders = () => {
         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '400px', margin: 'auto' }}>
           {editMode && (
             <div>
-              <h2>Edit Company</h2>
+              <h2>Edit Stock</h2>
               <TextField
-                label="Name"
-                value={selectedCompany.name}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, name: e.target.value })}
+                label="Symbol"
+                value={selectedStock.symbol}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, symbol: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Ticker"
-                value={selectedCompany.ticker}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, ticker: e.target.value })}
+                label="CurrentPrice"
+                value={selectedStock.currentPrice}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, currentPrice: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Sector"
-                value={selectedCompany.sector}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, sector: e.target.value })}
+                label="marcketCap"
+                value={selectedStock.marketCap}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, marketCap: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Industry"
-                value={selectedCompany.industry}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, industry: e.target.value })}
+                label="dividendYield"
+                value={selectedStock.dividendYield}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, dividendYield: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
                 label="Description"
-                value={selectedCompany.description}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, description: e.target.value })}
+                value={selectedStock.description}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, description: e.target.value })}
                 fullWidth
                 margin="normal"
                 multiline
@@ -247,39 +272,39 @@ const Orders = () => {
           )}
           {registrationMode && (
             <div>
-              <h2>Register New Company</h2>
+              <h2>Register New Stock</h2>
               <TextField
-                label="Company Name"
-                value={selectedCompany.name}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, name: e.target.value })}
+                label="Stock Symbol"
+                value={selectedStock.symbol}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, symbol: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Company Ticker"
-                value={selectedCompany.ticker}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, ticker: e.target.value })}
+                label="Stock CurrentPrice"
+                value={selectedStock.currentPrice}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, currentPrice: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Sector"
-                value={selectedCompany.sector}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, sector: e.target.value })}
+                label="marcketCap"
+                value={selectedStock.marketCap}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, marketCap: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Industry"
-                value={selectedCompany.industry}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, industry: e.target.value })}
+                label="dividendYield"
+                value={selectedStock.dividendYield}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, dividendYield: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
                 label="Description"
-                value={selectedCompany.description}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, description: e.target.value })}
+                value={selectedStock.description}
+                onChange={(e) => setSelectedStockState({ ...selectedStock, description: e.target.value })}
                 fullWidth
                 margin="normal"
                 multiline
@@ -291,10 +316,10 @@ const Orders = () => {
         </div>
       </Modal>
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-        <DialogTitle>Delete Company</DialogTitle>
+        <DialogTitle>Delete Stock</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this company?
+            Are you sure you want to delete this stock?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -303,14 +328,14 @@ const Orders = () => {
         </DialogActions>
       </Dialog>
       <Dialog open={viewDetailModalOpen} onClose={() => setViewDetailModalOpen(false)}>
-        <DialogTitle>Company Details</DialogTitle>
+        <DialogTitle>Stock Details</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p>Name: {selectedCompanyState?.name}</p>
-            <p>Ticker: {selectedCompanyState?.ticker}</p>
-            <p>Sector: {selectedCompanyState?.sector}</p>
-            <p>Industry: {selectedCompanyState?.industry}</p>
-            <p>Description: {selectedCompanyState?.description}</p>
+            <p>Symbol: {selectedStockState?.symbol}</p>
+            <p>CurrentPrice: {selectedStockState?.currentPrice}</p>
+            <p>marcketCap: {selectedStockState?.marketCap}</p>
+            <p>dividendYield: {selectedStockState?.dividendYield}</p>
+            <p>Description: {selectedStockState?.description}</p>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -329,4 +354,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Stocks;

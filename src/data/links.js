@@ -18,46 +18,129 @@ export const links = [
     url: "/",
   },
   {
-    name: "Desposit Accounts",
+    name: "Stock Management",
     icon: <FiShoppingBag />,
     subLinks: [
       {
-        name: "All Accounts",
-        url: "/products",
+        name: "All Stocks",
+        url: "/stocks",
       },
       {
-        name: "Add deposit account",
-        url: "/products/add",
+        name: "Add Stock",
+        url: "/stocks",
       },
-      {
-        name: "Deposit Category",
-        url: "/products/categories",
-      },
+      
     ],
   },
   {
-    name: "Customers",
-    icon: <FiUsers />,
-    url: "/customers",
-  },
-  {
-    name: "Sales",
-    icon: <BsCurrencyDollar />,
+    name: "News Management",
+    icon: <FiShoppingBag />,
     subLinks: [
       {
-        name: "Sales Analytics",
-        url: "/sales/analysis",
+        name: "All news",
+        url: "/news",
       },
       {
-        name: "Product Sales",
-        url: "/sales",
+        name: "Add news",
+        url: "/news",
       },
+      
+    ],
+  },
+  {
+    name: "Deposits Management",
+    icon: <FiShoppingBag />,
+    subLinks: [
+      {
+        name: "All Deposits",
+        url: "/deposits",
+      },
+      {
+        name: "Add deposit",
+        url: "/deposits",
+      },
+      
+    ],
+  },
+  {
+    name: "Order Management",
+    icon: <FiShoppingBag />,
+    subLinks: [
+      {
+        name: "All Orders",
+        url: "/orders",
+      },
+      {
+        name: "Add orders",
+        url: "/orders",
+      },
+      
+    ],
+  },
+  {
+    name: "User Management",
+    icon: <FiShoppingBag />,
+    subLinks: [
+      {
+        name: "All Users",
+        url: "/users",
+      },
+      {
+        name: "Add User",
+        url: "/users",
+      },
+      
+    ],
+  },
+  {
+    name: "Withdraw Management",
+    icon: <FiShoppingBag />,
+    subLinks: [
+      {
+        name: "All withdraws",
+        url: "/withdraws",
+      },
+      {
+        name: "Add withdraw",
+        url: "/withdraws",
+      },
+      
+    ],
+  }, 
+
+  {
+    name: "Company Management",
+    icon: <FiShoppingBag />,
+    subLinks: [
+      {
+        name: "All Company ",
+        url: "/companies",
+      },  
+      {
+        name: "Add company ",
+        url: "/companies",
+      },    
+    ],
+  },
+
+  {
+    name: "Stocks Management",
+    icon: <FiShoppingBag />,
+    subLinks: [
+      {
+        name: "Stock ",
+        url: "/stocks",
+      },      
     ],
   },
   {
     name: "Orders",
     icon: <FiShoppingCart />,
     subLinks: [
+      {
+        name: "Add stocks",
+        url: "/stocks/add",
+      },
       {
         name: "All Orders",
         url: "/orders",

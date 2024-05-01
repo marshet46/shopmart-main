@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { FiEye, FiTrash } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
-const Orders = () => {
+const CompanyList = () => {
 
   const dispatch = useDispatch();
   const [selectedCompany, setSelectedCompanyState] = useState({
@@ -329,4 +329,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default CompanyList;
