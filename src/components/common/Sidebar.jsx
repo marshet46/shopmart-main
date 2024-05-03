@@ -10,7 +10,7 @@ const Sidebar = ({ window, sideBarWidth, mobileOpen, handleDrawerToggle }) => {
       <Toolbar>
         <img src="/logo.png" alt="Logo" width="40" />
         <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2 }}>
-          Aksion 
+          Aksion
         </Typography>
       </Toolbar>
       <Divider />
@@ -49,7 +49,7 @@ const Sidebar = ({ window, sideBarWidth, mobileOpen, handleDrawerToggle }) => {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: sideBarWidth,
-            backgroundColor: "sidebar.background",
+            backgroundColor: "#D5A30D", // Set the background color to #D5A30D
             color: "sidebar.textColor",
           },
         }}
@@ -69,7 +69,7 @@ const Sidebar = ({ window, sideBarWidth, mobileOpen, handleDrawerToggle }) => {
             width: sideBarWidth,
             boxSizing: "border-box",
             borderRight: 0,
-            backgroundColor: "sidebar.background",
+            backgroundColor: "#D5A30D", // Set the background color to #D5A30D
             color: "sidebar.textColor",
           },
         }}

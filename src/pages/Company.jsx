@@ -247,7 +247,7 @@ const CompanyList = () => {
           )}
           {registrationMode && (
             <div>
-              <h2>Register New Company</h2>
+              <h2>Add Company</h2>
               <TextField
                 label="Company Name"
                 value={selectedCompany.name}

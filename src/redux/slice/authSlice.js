@@ -11,7 +11,7 @@ const initialState = {
 
 export const login = createAsyncThunk('auth/login', async (formData, { rejectWithValue }) => {
   try {
-    const response = await axios.post('http://localhost:3000/api/login', formData);
+    const response = await axios.post('https://aksion.abyssiniasoftware.com/api/login', formData);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

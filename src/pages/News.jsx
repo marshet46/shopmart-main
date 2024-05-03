@@ -171,7 +171,7 @@ const Newss = () => {
                   direction={sortDirection}
                   onClick={() => sortNewss('author')}
                 >
-                  MarketCap
+                  Author
                 </TableSortLabel>
                 
               </TableCell>
@@ -265,7 +265,7 @@ const Newss = () => {
           )}
           {registrationMode && (
             <div>
-              <h2>Register New News</h2>
+              <h2>Add News</h2>
               <TextField
                 label="News Title"
                 value={selectedNews.title}

@@ -49,7 +49,7 @@ const SidebarItemCollapse = ({ name, icon, url, subLinks }) => {
           paddingX: "24px",
         }}
       >
-        <ListItemIcon sx={{ color: "sidebar.textColor" }}>{icon}</ListItemIcon>
+        <ListItemIcon sx={{ color: "green" }}>{icon}</ListItemIcon>
         <ListItemText primary={name} sx={{ ml: "-10px" }} />
         {open ? <FiChevronUp /> : <FiChevronDown />}
       </ListItemButton>
@@ -75,7 +75,7 @@ const SidebarItemCollapse = ({ name, icon, url, subLinks }) => {
                 <CustomListItemText
                   primary={name}
                   sx={{
-                    color: "sidebar.textColor",
+                    color: "white",
                   }}
                 />
               </ListItemButton>

@@ -192,7 +192,7 @@ const Deposits = () => {
                   <TableCell>{deposit.User.name}</TableCell>
                   <TableCell>{deposit.User.phone}</TableCell>
                   <TableCell>{deposit.status}</TableCell>
-                  <TableCell>
+                  <TableCell> 
                     <IconButton onClick={() => handleEdit(deposit)}>
                       <Tooltip title="Edit">
                         <FiEye />

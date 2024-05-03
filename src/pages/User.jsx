@@ -272,7 +272,7 @@ const Users = () => {
           )}
           {registrationMode && (
             <div>
-              <h2>Register New User</h2>
+              <h2>Add User</h2>
               <TextField
                 label="User name"
                 value={selectedUser.name}

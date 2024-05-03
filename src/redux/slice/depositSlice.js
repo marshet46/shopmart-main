@@ -10,28 +10,28 @@ const initialState = {
 };
 
 export const fetchDeposits = createAsyncThunk('deposits/fetchDeposits', async () => {
-  const response = await axios.get('http://localhost:3000/api/deposits/request');
+  const response = await axios.get('https://aksion.abyssiniasoftware.com/api/deposits/request');
   console.log(response.data);
   return response.data;
 });
 
 export const fetchDepositById = createAsyncThunk('deposits/fetchDepositById', async (depositId) => {
-  const response = await axios.get(`http://localhost:3000/api/deposits/request/${depositId}`);
+  const response = await axios.get(`https://aksion.abyssiniasoftware.com/api/deposits/request/${depositId}`);
   return response.data;
 });
 
 export const addDeposit = createAsyncThunk('deposits/addDeposit', async (deposit) => {
-  const response = await axios.post('http://localhost:3000/api/deposits/request', deposit);
+  const response = await axios.post('https://aksion.abyssiniasoftware.com/api/deposits/request', deposit);
   return response.data;
 });
 
 export const updateDeposit = createAsyncThunk('deposits/updateDeposit', async (deposit) => {
-  const response = await axios.put(`http://localhost:3000/api/deposits/request/${deposit.id}`, deposit);
+  const response = await axios.put(`https://aksion.abyssiniasoftware.com/api/deposits/request/${deposit.id}`, deposit);
   return response.data;
 });
 
 export const deleteDeposit = createAsyncThunk('deposits/deleteDeposit', async (depositId) => {
-  await axios.delete(`http://localhost:3000/api/deposits/request/${depositId}`);
+  await axios.delete(`https://aksion.abyssiniasoftware.com/api/deposits/request/${depositId}`);
   return depositId;
 });
 

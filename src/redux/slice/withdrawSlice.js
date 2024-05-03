@@ -10,29 +10,29 @@ const initialState = {
 };
 
 export const fetchWithdraws = createAsyncThunk('withdraws/fetchWithdraws', async () => {
-  const response = await axios.get('http://localhost:3000/api/withdrawals/request');
+  const response = await axios.get('https://aksion.abyssiniasoftware.com/api/withdrawals/request');
   console.log(response.data);
   return response.data;
 });
 
 export const fetchWithdrawById = createAsyncThunk('withdraws/fetchWithdrawById', async (withdrawId) => {
-  const response = await axios.get(`http://localhost:3000/api/withdrawals/request/${withdrawId}`);
+  const response = await axios.get(`https://aksion.abyssiniasoftware.com/api/withdrawals/request/${withdrawId}`);
   return response.data;
 });
 
 export const addWithdraw = createAsyncThunk('withdraws/addWithdraw', async (withdraw) => {
-  const response = await axios.post('http://localhost:3000/api/withdrawals/request', withdraw);
+  const response = await axios.post('https://aksion.abyssiniasoftware.com/api/withdrawals/request', withdraw);
   console.log(withdraw);
   return response.data;
 });
 
 export const updateWithdraw = createAsyncThunk('withdraws/updateWithdraw', async (withdraw) => {
-  const response = await axios.put(`http://localhost:3000/api/withdrawals/requests/${withdraw.id}`, withdraw);
+  const response = await axios.put(`https://aksion.abyssiniasoftware.com/api/withdrawals/requests/${withdraw.id}`, withdraw);
   return response.data;
 });
 
 export const deleteWithdraw = createAsyncThunk('withdraws/deleteWithdraw', async (withdrawId) => {
-  await axios.delete(`http://localhost:3000/api/withdrawals/request/${withdrawId}`);
+  await axios.delete(`https://aksion.abyssiniasoftware.com/api/withdrawals/request/${withdrawId}`);
   return withdrawId;
 });
 

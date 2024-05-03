@@ -176,7 +176,10 @@ const Withdraws = () => {
                 
               </TableCell>
               
-              
+              <TableCell>name</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>email</TableCell>
+              <TableCell>Region</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -188,6 +191,11 @@ const Withdraws = () => {
                   <TableCell>{withdraw.amount}</TableCell>
                   <TableCell>{withdraw.bankName}</TableCell>
                   <TableCell>{withdraw.status}</TableCell>
+                  <TableCell>{withdraw.User.name}</TableCell>
+                  <TableCell>{withdraw.User.phone}</TableCell>
+                  <TableCell>{withdraw.User.email}</TableCell>
+                  <TableCell>{withdraw.User.addressRegion}</TableCell>
+
          
                   <TableCell>
                     <IconButton onClick={() => handleEdit(withdraw)}>
@@ -257,7 +265,7 @@ const Withdraws = () => {
           )}
           {registrationMode && (
             <div>
-              <h2>Register New Withdraw</h2>
+              <h2>Add Withdraw</h2>
               <TextField
                 label="Withdraw Amount"
                 value={selectedWithdraw.amount}
@@ -273,7 +281,7 @@ const Withdraws = () => {
                 margin="normal"
               />
               <TextField
-                label="marcketCap"
+                label="status"
                 value={selectedWithdraw.status}
                 onChange={(e) => setSelectedWithdrawState({ ...selectedWithdraw, status: e.target.value })}
                 fullWidth
@@ -304,7 +312,7 @@ const Withdraws = () => {
           <DialogContentText>
             <p>Amount: {selectedWithdrawState?.amount}</p>
             <p>BankName: {selectedWithdrawState?.bankName}</p>
-            <p>marcketCap: {selectedWithdrawState?.status}</p>
+            <p>status: {selectedWithdrawState?.status}</p>
       
 
           </DialogContentText>

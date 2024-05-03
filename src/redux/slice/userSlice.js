@@ -10,28 +10,28 @@ const initialState = {
 };
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const response = await axios.get('http://localhost:3000/api/users');
+  const response = await axios.get('https://aksion.abyssiniasoftware.com/api/users');
   return response.data;
 });
 
 export const fetchUserById = createAsyncThunk('users/fetchUserById', async (userId) => {
-  const response = await axios.get(`http://localhost:3000/api/users/${userId}`);
+  const response = await axios.get(`https://aksion.abyssiniasoftware.com/api/users/${userId}`);
   return response.data;
 });
 
 export const addUser = createAsyncThunk('users/addUser', async (user) => {
-  const response = await axios.post('http://localhost:3000/api/users', user);
+  const response = await axios.post('https://aksion.abyssiniasoftware.com/api/users', user);
   console.log(user);
   return response.data;
 });
 
 export const updateUser = createAsyncThunk('users/updateUser', async (user) => {
-  const response = await axios.put(`http://localhost:3000/api/users/${user.id}`, user);
+  const response = await axios.put(`https://aksion.abyssiniasoftware.com/api/users/${user.id}`, user);
   return response.data;
 });
 
 export const deleteUser = createAsyncThunk('users/deleteUser', async (userId) => {
-  await axios.delete(`http://localhost:3000/api/users/${userId}`);
+  await axios.delete(`https://aksion.abyssiniasoftware.com/api/users/${userId}`);
   return userId;
 });
 

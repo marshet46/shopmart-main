@@ -134,6 +134,16 @@ export const links = [
     ],
   },
   {
+    name: "Sell Stocks Management",
+    icon: <FiShoppingBag />,
+    subLinks: [
+      {
+        name: "Sell Stock Order ",
+        url: "/sells",
+      },      
+    ],
+  },
+  {
     name: "Orders",
     icon: <FiShoppingCart />,
     subLinks: [

@@ -38,6 +38,7 @@ const Dashboard = () => {
         <Grid container spacing={4}>
         <Grid item xs={12}>
             <Divider />
+            <Divider />
             <Typography variant="h3">Data analayis </Typography>
           </Grid>
          

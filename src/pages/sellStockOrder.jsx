@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCompanies, fetchCompanyById, deleteCompany, updateCompany, addCompany, setSelectedCompany } from '../redux/slice/companySlice';
+import { fetchSellStocks, fetchSellStockById, deleteSellStock, updateSellStock, addSellStock, setSelectedSellStock } from '../redux/slice/sellStockSlice';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, TablePagination, TableSortLabel, Button, Modal, FormControl, InputLabel, Input, FormHelperText, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from '@mui/material';
 import { FiEye, FiTrash } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-
-const Orders = () => {
+ 
+const SellStocks = () => {
 
   const dispatch = useDispatch();
-  const [selectedCompany, setSelectedCompanyState] = useState({
-    name: '',
-    ticker: '',
-    sector: '',
-    industry: '',
+  const [selectedSellStock, setSelectedSellStockState] = useState({
+    symbol: '',
+    currentPrice: '',
+    marketCap: '',
+    dividendYield: '',
     description: ''
   });
   const [editMode, setEditMode] = useState(false);
@@ -26,53 +26,53 @@ const Orders = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const companies = useSelector((state) => state.companies.companies);
-  const selectedCompanyState = useSelector((state) => state.companies.selectedCompany);
-  const status = useSelector((state) => state.companies.status);
-  const error = useSelector((state) => state.companies.error);
+  const sellStocks = useSelector((state) => state.sellStocks.sellStocks);
+  const selectedSellStockState = useSelector((state) => state.sellStocks.selectedSellStock);
+  const status = useSelector((state) => state.sellStocks.status);
+  const error = useSelector((state) => state.sellStocks.error);
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchCompanies());
+      dispatch(fetchSellStocks());
     }
   }, [status, dispatch]);
 
   useEffect(() => {
-    if (selectedCompanyState) {
-      setSelectedCompanyState(selectedCompanyState);
+    if (selectedSellStockState) {
+      setSelectedSellStockState(selectedSellStockState);
       setEditMode(false);
     }
-  }, [selectedCompanyState]);
+  }, [selectedSellStockState]);
 
   const handleDelete = (id) => {
     setDeleteDialogOpen(true);
-    setSelectedCompanyState(id);
+    setSelectedSellStockState(id);
   };
 
   const confirmDelete = () => {
-    dispatch(deleteCompany(selectedCompany));
+    dispatch(deleteSellStock(selectedSellStock));
     setDeleteDialogOpen(false);
   };
 
-  const handleEdit = (company) => {
-    dispatch(setSelectedCompany(company));
+  const handleEdit = (sellStock) => {
+    dispatch(setSelectedSellStock(sellStock));
     setEditMode(true);
   };
 
   const handleSave = () => {
-    dispatch(updateCompany(selectedCompany));
+    dispatch(updateSellStock(selectedSellStock));
     setEditMode(false);
     setSnackbarOpen(true);
-    setSnackbarMessage('Company updated successfully');
+    setSnackbarMessage('SellStock updated successfully');
   };
 
   const handleCancel = () => {
     setEditMode(false);
-    dispatch(setSelectedCompany(null));
+    dispatch(setSelectedSellStock(null));
   };
 
   const handleViewDetail = (id) => {
-    dispatch(fetchCompanyById(id));
+    dispatch(fetchSellStockById(id));
     setViewDetailModalOpen(true);
   };
 
@@ -81,10 +81,10 @@ const Orders = () => {
   };
 
   const handleRegisterSave = () => {
-    dispatch(addCompany(selectedCompany));
+    dispatch(addSellStock(selectedSellStock));
     setRegistrationMode(false);
     setSnackbarOpen(true);
-    setSnackbarMessage('Company registered successfully');
+    setSnackbarMessage('SellStock registered successfully');
   };
 
   const handleRegisterCancel = () => {
@@ -96,22 +96,22 @@ const Orders = () => {
     setPage(0); // Reset page to first page when searching
   };
 
-  const sortCompanies = (columnId) => {
+  const sortSellStocks = (columnId) => {
     const isAsc = sortColumn === columnId && sortDirection === 'asc';
     setSortDirection(isAsc ? 'desc' : 'asc');
     setSortColumn(columnId);
   };
 
-  const filteredCompanies = companies.filter(company =>
-    company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    company.ticker.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredSellStocks = sellStocks.filter(sellStock =>
+    sellStock.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    sellStock.currentPrice.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const sortedCompanies = filteredCompanies.slice().sort((a, b) => {
-    if (sortColumn === 'name') {
-      return sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
-    } else if (sortColumn === 'ticker') {
-      return sortDirection === 'asc' ? a.ticker.localeCompare(b.ticker) : b.ticker.localeCompare(a.ticker);
+  const sortedSellStocks = filteredSellStocks.slice().sort((a, b) => {
+    if (sortColumn === 'symbol') {
+      return sortDirection === 'asc' ? a.symbol.localeCompare(b.symbol) : b.symbol.localeCompare(a.symbol);
+    } else if (sortColumn === 'currentPrice') {
+      return sortDirection === 'asc' ? a.currentPrice.localeCompare(b.currentPrice) : b.currentPrice.localeCompare(a.currentPrice);
     }
     return 0;
   });
@@ -139,52 +139,77 @@ const Orders = () => {
 
   return (
     <div>
-      <h1>Company List</h1>
-      <Button variant="contained" onClick={handleRegister}>Register New Company</Button>
+      <h1>SellStock List</h1>
+      <Button variant="contained" onClick={handleRegister}>Register New SellStock</Button>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'name'}
+                  active={sortColumn === 'symbol'}
                   direction={sortDirection}
-                  onClick={() => sortCompanies('name')}
+                  onClick={() => sortSellStocks('symbol')}
                 >
-                  Name
+                  Symbol
                 </TableSortLabel>
               </TableCell>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'ticker'}
+                  active={sortColumn === 'currentPrice'}
                   direction={sortDirection}
-                  onClick={() => sortCompanies('ticker')}
+                  onClick={() => sortSellStocks('currentPrice')}
                 >
-                  Ticker
+                  CurrentPrice
                 </TableSortLabel>
+                
               </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'marketCap'}
+                  direction={sortDirection}
+                  onClick={() => sortSellStocks('marketCap')}
+                >
+                  MarketCap
+                </TableSortLabel>
+                
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortColumn === 'dividendYield'}
+                  direction={sortDirection}
+                  onClick={() => sortSellStocks('dividendYield')}
+                >
+                  dividendYield
+                </TableSortLabel>
+                
+              </TableCell>
+              
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedCompanies
+            {sortedSellStocks
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((company) => (
-                <TableRow key={company.id}>
-                  <TableCell>{company.name}</TableCell>
-                  <TableCell>{company.ticker}</TableCell>
+              .map((sellStock) => (
+                <TableRow key={sellStock.id}>
+                  <TableCell>{sellStock.symbol}</TableCell>
+                  <TableCell>{sellStock.currentPrice}</TableCell>
+                  <TableCell>{sellStock.marketCap}</TableCell>
+                  <TableCell>{sellStock.dividendYield}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleEdit(company)}>
+                    <IconButton onClick={() => handleEdit(sellStock)}>
                       <Tooltip title="Edit">
                         <FiEye />
                       </Tooltip>
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(company.id)}>
+                    <IconButton onClick={() => handleDelete(sellStock.id)}>
                       <Tooltip title="Delete">
                         <FiTrash />
                       </Tooltip>
                     </IconButton>
-                    <Button onClick={() => handleViewDetail(company.id)}>View Detail</Button>
+                    <Button onClick={() => handleViewDetail(sellStock.id)}>View Detail</Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -194,7 +219,7 @@ const Orders = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={filteredCompanies.length}
+        count={filteredSellStocks.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -204,39 +229,39 @@ const Orders = () => {
         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '400px', margin: 'auto' }}>
           {editMode && (
             <div>
-              <h2>Edit Company</h2>
+              <h2>Edit SellStock</h2>
               <TextField
-                label="Name"
-                value={selectedCompany.name}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, name: e.target.value })}
+                label="Symbol"
+                value={selectedSellStock.symbol}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, symbol: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Ticker"
-                value={selectedCompany.ticker}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, ticker: e.target.value })}
+                label="CurrentPrice"
+                value={selectedSellStock.currentPrice}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, currentPrice: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Sector"
-                value={selectedCompany.sector}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, sector: e.target.value })}
+                label="marcketCap"
+                value={selectedSellStock.marketCap}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, marketCap: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Industry"
-                value={selectedCompany.industry}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, industry: e.target.value })}
+                label="dividendYield"
+                value={selectedSellStock.dividendYield}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, dividendYield: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
                 label="Description"
-                value={selectedCompany.description}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, description: e.target.value })}
+                value={selectedSellStock.description}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, description: e.target.value })}
                 fullWidth
                 margin="normal"
                 multiline
@@ -247,39 +272,39 @@ const Orders = () => {
           )}
           {registrationMode && (
             <div>
-              <h2>Add Company</h2>
+              <h2>Add SellStock</h2>
               <TextField
-                label="Company Name"
-                value={selectedCompany.name}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, name: e.target.value })}
+                label="SellStock Symbol"
+                value={selectedSellStock.symbol}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, symbol: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Company Ticker"
-                value={selectedCompany.ticker}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, ticker: e.target.value })}
+                label="SellStock CurrentPrice"
+                value={selectedSellStock.currentPrice}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, currentPrice: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Sector"
-                value={selectedCompany.sector}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, sector: e.target.value })}
+                label="marcketCap"
+                value={selectedSellStock.marketCap}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, marketCap: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="Industry"
-                value={selectedCompany.industry}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, industry: e.target.value })}
+                label="dividendYield"
+                value={selectedSellStock.dividendYield}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, dividendYield: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
                 label="Description"
-                value={selectedCompany.description}
-                onChange={(e) => setSelectedCompanyState({ ...selectedCompany, description: e.target.value })}
+                value={selectedSellStock.description}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, description: e.target.value })}
                 fullWidth
                 margin="normal"
                 multiline
@@ -291,10 +316,10 @@ const Orders = () => {
         </div>
       </Modal>
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-        <DialogTitle>Delete Company</DialogTitle>
+        <DialogTitle>Delete SellStock</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this company?
+            Are you sure you want to delete this sellStock?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -303,14 +328,14 @@ const Orders = () => {
         </DialogActions>
       </Dialog>
       <Dialog open={viewDetailModalOpen} onClose={() => setViewDetailModalOpen(false)}>
-        <DialogTitle>Company Details</DialogTitle>
+        <DialogTitle>SellStock Details</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p>Name: {selectedCompanyState?.name}</p>
-            <p>Ticker: {selectedCompanyState?.ticker}</p>
-            <p>Sector: {selectedCompanyState?.sector}</p>
-            <p>Industry: {selectedCompanyState?.industry}</p>
-            <p>Description: {selectedCompanyState?.description}</p>
+            <p>Symbol: {selectedSellStockState?.symbol}</p>
+            <p>CurrentPrice: {selectedSellStockState?.currentPrice}</p>
+            <p>marcketCap: {selectedSellStockState?.marketCap}</p>
+            <p>dividendYield: {selectedSellStockState?.dividendYield}</p>
+            <p>Description: {selectedSellStockState?.description}</p>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -329,4 +354,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default SellStocks;

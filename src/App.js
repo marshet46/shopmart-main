@@ -32,6 +32,7 @@ import {
   StockOrder,
   User,
   Withdraw,
+  SellOrder,
 
 } from "./pages";
 import Footer from "./components/common/Footer";
@@ -74,7 +75,9 @@ function App() {
               <Route path="/deposits" element={<Deposits/>} />
               <Route path="/orders" element={<StockOrder/>} />
               <Route path="/users" element={<User/>} />
-              <Route path="withdraws" element={<Withdraw/>} />
+              <Route path="/withdraws" element={<Withdraw/>} />
+              <Route path="/sells" element={<SellOrder/>} />
+
 
               <Route path="/products/:id" element={<SingleProduct />} />
               <Route path="/products/categories" element={<ProductCategories />} />

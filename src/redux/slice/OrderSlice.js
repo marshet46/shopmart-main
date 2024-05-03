@@ -10,28 +10,28 @@ const initialState = {
 };
 
 export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
-  const response = await axios.get('http://localhost:3000/api/stock-orders');
+  const response = await axios.get('https://aksion.abyssiniasoftware.com/api/stock-orders');
   return response.data;
 });
 
 export const fetchOrderById = createAsyncThunk('orders/fetchOrderById', async (orderId) => {
-  const response = await axios.get(`http://localhost:3000/api/stock-orders/${orderId}`);
+  const response = await axios.get(`https://aksion.abyssiniasoftware.com/api/stock-orders/${orderId}`);
   return response.data;
 });
 
 export const addOrder = createAsyncThunk('orders/addOrder', async (order) => {
-  const response = await axios.post('http://localhost:3000/api/stock-orders', order);
+  const response = await axios.post('https://aksion.abyssiniasoftware.com/api/stock-orders', order);
   console.log(order);
   return response.data;
 });
 
 export const updateOrder = createAsyncThunk('orders/updateOrder', async (order) => {
-  const response = await axios.put(`http://localhost:3000/api/stock-orders/${order.id}`, order);
+  const response = await axios.put(`https://aksion.abyssiniasoftware.com/api/stock-orders/${order.id}`, order);
   return response.data;
 });
 
 export const deleteOrder = createAsyncThunk('orders/deleteOrder', async (orderId) => {
-  await axios.delete(`http://localhost:3000/api/stock-orders/${orderId}`);
+  await axios.delete(`https://aksion.abyssiniasoftware.com/api/stock-orders/${orderId}`);
   return orderId;
 });
 

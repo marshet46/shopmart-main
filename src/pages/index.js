@@ -6,6 +6,7 @@ export { default as Deposits } from "./Deposit";
 export { default as StockOrder } from "./StockOrders";
 export { default as User} from "./User";
 export { default as Withdraw} from "./Withdraw";
+export { default as SellOrder} from "./sellStockOrder";
 
 export { default as Products } from "./Products";
 export { default as AddProduct } from "./AddProduct";

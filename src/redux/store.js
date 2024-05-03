@@ -11,6 +11,8 @@ import depostsReducer from './slice/depositSlice';
 import orderReducer from './slice/OrderSlice';
 import userReducer from './slice/userSlice';
 import withdrawReducer from './slice/withdrawSlice';
+import sellStockReducer from './slice/sellStockSlice';
+
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -23,6 +25,7 @@ const store = configureStore({
     orders: orderReducer,
     users: userReducer,
     withdraws: withdrawReducer,
+    sellStocks: sellStockReducer,
 
   }
 });

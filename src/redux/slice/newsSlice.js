@@ -10,28 +10,28 @@ const initialState = {
 };
 
 export const fetchNewss = createAsyncThunk('newss/fetchNewss', async () => {
-  const response = await axios.get('http://localhost:3000/api/news');
+  const response = await axios.get('https://aksion.abyssiniasoftware.com/api/news');
   return response.data;
 });
 
 export const fetchNewsById = createAsyncThunk('newss/fetchNewsById', async (newsId) => {
-  const response = await axios.get(`http://localhost:3000/api/news/${newsId}`);
+  const response = await axios.get(`https://aksion.abyssiniasoftware.com/api/news/${newsId}`);
   return response.data;
 });
 
 export const addNews = createAsyncThunk('newss/addNews', async (news) => {
-  const response = await axios.post('http://localhost:3000/api/news', news);
+  const response = await axios.post('https://aksion.abyssiniasoftware.com/api/news', news);
   console.log(news);
   return response.data;
 });
 
 export const updateNews = createAsyncThunk('newss/updateNews', async (news) => {
-  const response = await axios.put(`http://localhost:3000/api/news/${news.id}`, news);
+  const response = await axios.put(`https://aksion.abyssiniasoftware.com/api/news/${news.id}`, news);
   return response.data;
 });
 
 export const deleteNews = createAsyncThunk('newss/deleteNews', async (newsId) => {
-  await axios.delete(`http://localhost:3000/api/news/${newsId}`);
+  await axios.delete(`https://aksion.abyssiniasoftware.com/api/news/${newsId}`);
   return newsId;
 });
 

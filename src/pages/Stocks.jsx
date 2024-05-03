@@ -272,7 +272,7 @@ const Stocks = () => {
           )}
           {registrationMode && (
             <div>
-              <h2>Register New Stock</h2>
+              <h2>Add Stock</h2>
               <TextField
                 label="Stock Symbol"
                 value={selectedStock.symbol}

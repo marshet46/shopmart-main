@@ -10,27 +10,27 @@ const initialState = {
 };
 
 export const fetchCompanies = createAsyncThunk('companies/fetchCompanies', async () => {
-  const response = await axios.get('http://localhost:3000/api/companies');
+  const response = await axios.get('https://aksion.abyssiniasoftware.com/api/companies');
   return response.data;
 });
 
 export const fetchCompanyById = createAsyncThunk('companies/fetchCompanyById', async (companyId) => {
-  const response = await axios.get(`http://localhost:3000/api/companies/${companyId}`);
+  const response = await axios.get(`https://aksion.abyssiniasoftware.com/api/companies/${companyId}`);
   return response.data;
 });
 
 export const addCompany = createAsyncThunk('companies/addCompany', async (company) => {
-  const response = await axios.post('http://localhost:3000/api/companies', company);
+  const response = await axios.post('https://aksion.abyssiniasoftware.com/api/companies', company);
   return response.data;
 });
 
 export const updateCompany = createAsyncThunk('companies/updateCompany', async (company) => {
-  const response = await axios.put(`http://localhost:3000/api/companies/${company.id}`, company);
+  const response = await axios.put(`https://aksion.abyssiniasoftware.com/api/companies/${company.id}`, company);
   return response.data;
 });
 
 export const deleteCompany = createAsyncThunk('companies/deleteCompany', async (companyId) => {
-  await axios.delete(`http://localhost:3000/api/companies/${companyId}`);
+  await axios.delete(`https://aksion.abyssiniasoftware.com/api/companies/${companyId}`);
   return companyId;
 });
 

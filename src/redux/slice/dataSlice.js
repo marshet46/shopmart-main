@@ -4,7 +4,7 @@ import axios from 'axios';
 export const fetchDashboardData = createAsyncThunk(
   'dashboard/fetchData',
   async () => {
-    const response = await axios.get('http://localhost:3000/api/dashboardData');
+    const response = await axios.get('https://aksion.abyssiniasoftware.com/api/dashboardData');
     return response.data;
   }
 );

@@ -10,28 +10,28 @@ const initialState = {
 };
 
 export const fetchStocks = createAsyncThunk('stocks/fetchStocks', async () => {
-  const response = await axios.get('http://localhost:3000/api/stocks');
+  const response = await axios.get('https://aksion.abyssiniasoftware.com/api/stocks');
   return response.data;
 });
 
 export const fetchStockById = createAsyncThunk('stocks/fetchStockById', async (stockId) => {
-  const response = await axios.get(`http://localhost:3000/api/stocks/${stockId}`);
+  const response = await axios.get(`https://aksion.abyssiniasoftware.com/api/stocks/${stockId}`);
   return response.data;
 });
 
 export const addStock = createAsyncThunk('stocks/addStock', async (stock) => {
-  const response = await axios.post('http://localhost:3000/api/stocks', stock);
+  const response = await axios.post('https://aksion.abyssiniasoftware.com/api/stocks', stock);
   console.log(stock);
   return response.data;
 });
 
 export const updateStock = createAsyncThunk('stocks/updateStock', async (stock) => {
-  const response = await axios.put(`http://localhost:3000/api/stocks/${stock.id}`, stock);
+  const response = await axios.put(`https://aksion.abyssiniasoftware.com/api/stocks/${stock.id}`, stock);
   return response.data;
 });
 
 export const deleteStock = createAsyncThunk('stocks/deleteStock', async (stockId) => {
-  await axios.delete(`http://localhost:3000/api/stocks/${stockId}`);
+  await axios.delete(`https://aksion.abyssiniasoftware.com/api/stocks/${stockId}`);
   return stockId;
 });
 

@@ -21,6 +21,14 @@ const Navbar = ({ sideBarWidth, handleDrawerToggle }) => {
 
   const currentTheme = theme.palette.mode;
 
+  const toggleTheme = () => {
+    colorMode.toggleColorMode();
+    document.documentElement.setAttribute(
+      "data-theme",
+      currentTheme === "light" ? "dark" : "light"
+    );
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -28,7 +36,7 @@ const Navbar = ({ sideBarWidth, handleDrawerToggle }) => {
         width: { md: `calc(100% - ${sideBarWidth}px)` },
         ml: { md: `${sideBarWidth}px` },
         boxShadow: "unset",
-        backgroundColor: "background.paper",
+        backgroundColor: "#D5A30D",
         color: "text.primary",
         borderBottomWidth: 1,
         borderBottomColor: "divider",
@@ -78,7 +86,7 @@ const Navbar = ({ sideBarWidth, handleDrawerToggle }) => {
             </Tooltip>
             <Tooltip title="Toggle Theme" arrow>
               <IconButton
-                onClick={colorMode.toggleColorMode}
+                onClick={toggleTheme}
                 sx={{ fontSize: "20px", color: "text.primary" }}
               >
                 {currentTheme === "light" ? <FiMoon /> : <FiSun />}
