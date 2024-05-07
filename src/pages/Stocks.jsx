@@ -128,13 +128,18 @@ const Stocks = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
   if (status === 'loading') {
-    return <div>Loading...</div>;
+ 
+    return  <div style={{ padding: '100px',color:'red' }}>
+    <div style={{alignContent:'center',fontSize:'100px'}}>Loading... please wait!</div>;
+</div>
   }
 
   if (status === 'failed') {
-    return <div>Error: {error}</div>;
+   return  <div style={{ padding: '100px',color:'red' }}>
+    <div style={{alignContent:'center',fontSize:'100px'}}>failed to load reload again</div>;
+</div>
+
   }
 
   return (
@@ -171,7 +176,7 @@ const Stocks = () => {
                   direction={sortDirection}
                   onClick={() => sortStocks('marketCap')}
                 >
-                  MarketCap
+                  Capital
                 </TableSortLabel>
                 
               </TableCell>
@@ -181,7 +186,7 @@ const Stocks = () => {
                   direction={sortDirection}
                   onClick={() => sortStocks('dividendYield')}
                 >
-                  dividendYield
+                  Share earning
                 </TableSortLabel>
                 
               </TableCell>

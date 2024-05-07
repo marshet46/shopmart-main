@@ -24,11 +24,20 @@ const Dashboard = () => {
   }, [dispatch]);
 
   if (loading) {
-    return <CircularProgress />;
+    return <div style={{ padding: '100px',color:'red' }}>
+    <Divider />
+    <Divider />
+    <Typography variant="h3">{error} please try again! </Typography>
+  </div> 
+   
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div style={{ padding: '100px',color:'red' }}>
+        <Divider />
+        <Divider />
+        <Typography variant="h3">{error} please try again! </Typography>
+      </div>
   }
 
   return (

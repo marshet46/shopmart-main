@@ -1,42 +1,43 @@
-// src/features/sellSellStocks/sellSellStockSlice.js
+// src/features/sellStocks/sellStockSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
-  sellSellStocks: [],
+  sellStocks: [],
   selectedSellStock: null,
   status: 'idle',
   error: null,
 };
 
-export const fetchSellStocks = createAsyncThunk('sellSellStocks/fetchSellStocks', async () => {
+export const fetchSellStocks = createAsyncThunk('sellStocks/fetchSellStocks', async () => {
   const response = await axios.get('https://aksion.abyssiniasoftware.com/api/sell-stocks');
+  console.log(response.data);
   return response.data;
 });
 
-export const fetchSellStockById = createAsyncThunk('sellSellStocks/fetchSellStockById', async (sellSellStockId) => {
-  const response = await axios.get(`https://aksion.abyssiniasoftware.com/api/sell-stocks/${sellSellStockId}`);
+export const fetchSellStockById = createAsyncThunk('sellStocks/fetchSellStockById', async (sellStockId) => {
+  const response = await axios.get(`https://aksion.abyssiniasoftware.com/api/sell-stocks/${sellStockId}`);
   return response.data;
 });
 
-export const addSellStock = createAsyncThunk('sellSellStocks/addSellStock', async (sellSellStock) => {
-  const response = await axios.post('https://aksion.abyssiniasoftware.com/api/sell-stocks', sellSellStock);
-  console.log(sellSellStock);
+export const addSellStock = createAsyncThunk('sellStocks/addSellStock', async (sellStock) => {
+  const response = await axios.post('https://aksion.abyssiniasoftware.com/api/sell-stocks', sellStock);
+  console.log(sellStock);
   return response.data;
 });
 
-export const updateSellStock = createAsyncThunk('sellSellStocks/updateSellStock', async (sellSellStock) => {
-  const response = await axios.put(`https://aksion.abyssiniasoftware.com/api/sell-stocks/${sellSellStock.id}`, sellSellStock);
+export const updateSellStock = createAsyncThunk('sellStocks/updateSellStock', async (sellStock) => {
+  const response = await axios.put(`https://aksion.abyssiniasoftware.com/api/sell-stocks/${sellStock.id}`, sellStock);
   return response.data;
 });
 
-export const deleteSellStock = createAsyncThunk('sellSellStocks/deleteSellStock', async (sellSellStockId) => {
-  await axios.delete(`https://aksion.abyssiniasoftware.com/api/sell-stocks/${sellSellStockId}`);
-  return sellSellStockId;
+export const deleteSellStock = createAsyncThunk('sellStocks/deleteSellStock', async (sellStockId) => {
+  await axios.delete(`https://aksion.abyssiniasoftware.com/api/sell-stocks/${sellStockId}`);
+  return sellStockId;
 });
 
-const sellSellStockSlice = createSlice({
-  name: 'sellSellStocks',
+const sellStockSlice = createSlice({
+  name: 'sellStocks',
   initialState,
   reducers: {
     setSelectedSellStock(state, action) {
@@ -50,7 +51,7 @@ const sellSellStockSlice = createSlice({
       })
       .addCase(fetchSellStocks.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.sellSellStocks = action.payload;
+        state.sellStocks = action.payload;
       })
       .addCase(fetchSellStocks.rejected, (state, action) => {
         state.status = 'failed';
@@ -68,19 +69,19 @@ const sellSellStockSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addSellStock.fulfilled, (state, action) => {
-        state.sellSellStocks.push(action.payload);
+        state.sellStocks.push(action.payload);
       })
       .addCase(updateSellStock.fulfilled, (state, action) => {
-        state.sellSellStocks = state.sellSellStocks.map((sellSellStock) =>
-          sellSellStock.id === action.payload.id ? action.payload : sellSellStock
+        state.sellStocks = state.sellStocks.map((sellStock) =>
+          sellStock.id === action.payload.id ? action.payload : sellStock
         );
       })
       .addCase(deleteSellStock.fulfilled, (state, action) => {
-        state.sellSellStocks = state.sellSellStocks.filter((sellSellStock) => sellSellStock.id !== action.payload);
+        state.sellStocks = state.sellStocks.filter((sellStock) => sellStock.id !== action.payload);
       });
   },
 });
 
-export const { setSelectedSellStock } = sellSellStockSlice.actions;
+export const { setSelectedSellStock } = sellStockSlice.actions;
 
-export default sellSellStockSlice.reducer;
+export default sellStockSlice.reducer;

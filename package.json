@@ -1,6 +1,7 @@
 {
   "name": "react-base-project",
   "version": "0.1.0",
+  "homepage": "https://aksion.abyssiniasoftware.com/frontend/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",

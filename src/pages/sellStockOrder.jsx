@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSellStocks, fetchSellStockById, deleteSellStock, updateSellStock, addSellStock, setSelectedSellStock } from '../redux/slice/sellStockSlice';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, TablePagination, TableSortLabel, Button, Modal, FormControl, InputLabel, Input, FormHelperText, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, TablePagination, TableSortLabel, Button, Modal, FormControl, InputLabel, Input, FormHelperText, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar,MenuItem, Select } from '@mui/material';
 import { FiEye, FiTrash } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
  
@@ -10,9 +10,9 @@ const SellStocks = () => {
   const dispatch = useDispatch();
   const [selectedSellStock, setSelectedSellStockState] = useState({
     symbol: '',
-    currentPrice: '',
-    marketCap: '',
-    dividendYield: '',
+    price: '',
+    quantity: '',
+    status: '',
     description: ''
   });
   const [editMode, setEditMode] = useState(false);
@@ -104,14 +104,14 @@ const SellStocks = () => {
 
   const filteredSellStocks = sellStocks.filter(sellStock =>
     sellStock.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    sellStock.currentPrice.toLowerCase().includes(searchQuery.toLowerCase())
+    sellStock.price.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const sortedSellStocks = filteredSellStocks.slice().sort((a, b) => {
     if (sortColumn === 'symbol') {
       return sortDirection === 'asc' ? a.symbol.localeCompare(b.symbol) : b.symbol.localeCompare(a.symbol);
-    } else if (sortColumn === 'currentPrice') {
-      return sortDirection === 'asc' ? a.currentPrice.localeCompare(b.currentPrice) : b.currentPrice.localeCompare(a.currentPrice);
+    } else if (sortColumn === 'price') {
+      return sortDirection === 'asc' ? a.price.localeCompare(b.price) : b.price.localeCompare(a.price);
     }
     return 0;
   });
@@ -130,17 +130,23 @@ const SellStocks = () => {
   };
 
   if (status === 'loading') {
-    return <div>Loading...</div>;
+ 
+    return  <div style={{ padding: '100px',color:'red' }}>
+    <div style={{alignContent:'center',fontSize:'100px'}}>Loading... please wait!</div>;
+</div>
   }
 
   if (status === 'failed') {
-    return <div>Error: {error}</div>;
+   return  <div style={{ padding: '100px',color:'red' }}>
+    <div style={{alignContent:'center',fontSize:'100px'}}>failed to load reload again</div>;
+</div>
+
   }
 
   return (
     <div>
       <h1>SellStock List</h1>
-      <Button variant="contained" onClick={handleRegister}>Register New SellStock</Button>
+      
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -156,9 +162,9 @@ const SellStocks = () => {
               </TableCell>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'currentPrice'}
+                  active={sortColumn === 'price'}
                   direction={sortDirection}
-                  onClick={() => sortSellStocks('currentPrice')}
+                  onClick={() => sortSellStocks('price')}
                 >
                   CurrentPrice
                 </TableSortLabel>
@@ -167,25 +173,26 @@ const SellStocks = () => {
 
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'marketCap'}
+                  active={sortColumn === 'quantity'}
                   direction={sortDirection}
-                  onClick={() => sortSellStocks('marketCap')}
+                  onClick={() => sortSellStocks('quantity')}
                 >
-                  MarketCap
+                  quantity
                 </TableSortLabel>
                 
               </TableCell>
               <TableCell>
                 <TableSortLabel
-                  active={sortColumn === 'dividendYield'}
+                  active={sortColumn === 'status'}
                   direction={sortDirection}
-                  onClick={() => sortSellStocks('dividendYield')}
+                  onClick={() => sortSellStocks('status')}
                 >
-                  dividendYield
+                  status
                 </TableSortLabel>
                 
               </TableCell>
-              
+              <TableCell>Name</TableCell>
+              <TableCell>phone</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -195,9 +202,11 @@ const SellStocks = () => {
               .map((sellStock) => (
                 <TableRow key={sellStock.id}>
                   <TableCell>{sellStock.symbol}</TableCell>
-                  <TableCell>{sellStock.currentPrice}</TableCell>
-                  <TableCell>{sellStock.marketCap}</TableCell>
-                  <TableCell>{sellStock.dividendYield}</TableCell>
+                  <TableCell>{sellStock.price}</TableCell>
+                  <TableCell>{sellStock.quantity}</TableCell>
+                  <TableCell>{sellStock.status}</TableCell>
+                  <TableCell>{sellStock.User.name}</TableCell>
+                  <TableCell>{sellStock.User.phone}</TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleEdit(sellStock)}>
                       <Tooltip title="Edit">
@@ -226,7 +235,7 @@ const SellStocks = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
       <Modal open={editMode || registrationMode}>
-        <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '400px', margin: 'auto' }}>
+        <div style={{ backgroundColor: 'white', padding: '20px', bsellStockRadius: '10px', width: '400px', margin: 'auto' }}>
           {editMode && (
             <div>
               <h2>Edit SellStock</h2>
@@ -239,25 +248,32 @@ const SellStocks = () => {
               />
               <TextField
                 label="CurrentPrice"
-                value={selectedSellStock.currentPrice}
-                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, currentPrice: e.target.value })}
+                value={selectedSellStock.price}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, price: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="marcketCap"
-                value={selectedSellStock.marketCap}
-                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, marketCap: e.target.value })}
+                label="quantity"
+                value={selectedSellStock.quantity}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, quantity: e.target.value })}
                 fullWidth
                 margin="normal"
               />
-              <TextField
-                label="dividendYield"
-                value={selectedSellStock.dividendYield}
-                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, dividendYield: e.target.value })}
-                fullWidth
-                margin="normal"
-              />
+             <FormControl fullWidth margin="normal">
+  <InputLabel id="status-label">Status</InputLabel>
+  <Select
+    labelId="status-label"
+    id="status"
+    value={selectedSellStock.status}
+    onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, status: e.target.value })}
+    label="Status"
+  >
+    <MenuItem value="approved">Approved</MenuItem>
+    <MenuItem value="rejected">Rejected</MenuItem>
+    <MenuItem value="pending">pending</MenuItem>
+  </Select>
+</FormControl>
               <TextField
                 label="Description"
                 value={selectedSellStock.description}
@@ -272,7 +288,7 @@ const SellStocks = () => {
           )}
           {registrationMode && (
             <div>
-              <h2>Add SellStock</h2>
+              <h2>Add New SellStock</h2>
               <TextField
                 label="SellStock Symbol"
                 value={selectedSellStock.symbol}
@@ -282,22 +298,22 @@ const SellStocks = () => {
               />
               <TextField
                 label="SellStock CurrentPrice"
-                value={selectedSellStock.currentPrice}
-                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, currentPrice: e.target.value })}
+                value={selectedSellStock.price}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, price: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="marcketCap"
-                value={selectedSellStock.marketCap}
-                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, marketCap: e.target.value })}
+                label="quantity"
+                value={selectedSellStock.quantity}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, quantity: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="dividendYield"
-                value={selectedSellStock.dividendYield}
-                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, dividendYield: e.target.value })}
+                label="status"
+                value={selectedSellStock.status}
+                onChange={(e) => setSelectedSellStockState({ ...selectedSellStock, status: e.target.value })}
                 fullWidth
                 margin="normal"
               />
@@ -332,9 +348,9 @@ const SellStocks = () => {
         <DialogContent>
           <DialogContentText>
             <p>Symbol: {selectedSellStockState?.symbol}</p>
-            <p>CurrentPrice: {selectedSellStockState?.currentPrice}</p>
-            <p>marcketCap: {selectedSellStockState?.marketCap}</p>
-            <p>dividendYield: {selectedSellStockState?.dividendYield}</p>
+            <p>CurrentPrice: {selectedSellStockState?.price}</p>
+            <p>quantity: {selectedSellStockState?.quantity}</p>
+            <p>status: {selectedSellStockState?.status}</p>
             <p>Description: {selectedSellStockState?.description}</p>
           </DialogContentText>
         </DialogContent>

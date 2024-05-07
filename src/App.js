@@ -49,10 +49,7 @@ function App() {
     <Provider store={store}>
       <Router>
         <Box sx={{ display: "flex" }}>
-          <Navbar
-            sideBarWidth={sideBarWidth}
-            handleDrawerToggle={handleDrawerToggle}
-          />
+        
           <Sidebar
             sideBarWidth={sideBarWidth}
             mobileOpen={mobileOpen}
