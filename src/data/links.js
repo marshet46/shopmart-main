@@ -25,10 +25,7 @@ export const links = [
         name: "All Stocks",
         url: "/stocks",
       },
-      {
-        name: "Add Stock",
-        url: "/stocks",
-      },
+     
       
     ],
   },
@@ -40,10 +37,7 @@ export const links = [
         name: "All news",
         url: "/news",
       },
-      {
-        name: "Add news",
-        url: "/news",
-      },
+    
       
     ],
   },
@@ -55,10 +49,7 @@ export const links = [
         name: "All Deposits",
         url: "/deposits",
       },
-      {
-        name: "Add deposit",
-        url: "/deposits",
-      },
+     
       
     ],
   },
@@ -70,10 +61,7 @@ export const links = [
         name: "All Orders",
         url: "/orders",
       },
-      {
-        name: "Add orders",
-        url: "/orders",
-      },
+     
       
     ],
   },
@@ -85,10 +73,7 @@ export const links = [
         name: "All Users",
         url: "/users",
       },
-      {
-        name: "Add User",
-        url: "/users",
-      },
+     
       
     ],
   },
@@ -100,10 +85,7 @@ export const links = [
         name: "All withdraws",
         url: "/withdraws",
       },
-      {
-        name: "Add withdraw",
-        url: "/withdraws",
-      },
+     
       
     ],
   }, 
@@ -117,9 +99,10 @@ export const links = [
         url: "/companies",
       },  
       {
-        name: "Add company ",
-        url: "/companies",
-      },    
+        name: "add Company ",
+        url: "/add",
+      },  
+        
     ],
   },
 
@@ -143,52 +126,45 @@ export const links = [
       },      
     ],
   },
-  {
-    name: "Orders",
-    icon: <FiShoppingCart />,
-    subLinks: [
-      {
-        name: "Add stocks",
-        url: "/stocks/add",
-      },
-      {
-        name: "All Orders",
-        url: "/orders",
-      },
-      {
-        name: "Order Template",
-        url: "/orders/template",
-      },
-    ],
-  },
-  {
-    name: "Suppliers",
-    icon: <FaShare />,
-    url: "/suppliers",
-  },
-  {
-    name: "Transactions",
-    icon: <FaHandshake />,
-    url: "/transactions",
-  },
-  {
-    name: "Brands",
-    icon: <FiLayers />,
-    url: "/brands",
-  },
-  {
-    name: "Reviews",
-    icon: <FiMessageCircle />,
-    url: "/reviews",
-  },
-  {
-    name: "Settings",
-    icon: <FiSettings />,
-    url: "/settings",
-  },
-  {
-    name: "Inbox",
-    icon: <FiMail />,
-    url: "/inbox",
-  },
+  // {
+  //   name: "Orders",
+  //   icon: <FiShoppingCart />,
+  //   subLinks: [
+  //     {
+  //       name: "Add stocks",
+  //       url: "/stocks/add",
+  //     },
+  //    ,
+  //   ],
+  // },
+  // {
+  //   name: "Suppliers",
+  //   icon: <FaShare />,
+  //   url: "/suppliers",
+  // },
+  // {
+  //   name: "Transactions",
+  //   icon: <FaHandshake />,
+  //   url: "/transactions",
+  // },
+  // {
+  //   name: "Brands",
+  //   icon: <FiLayers />,
+  //   url: "/brands",
+  // },
+  // {
+  //   name: "Reviews",
+  //   icon: <FiMessageCircle />,
+  //   url: "/reviews",
+  // },
+  // {
+  //   name: "Settings",
+  //   icon: <FiSettings />,
+  //   url: "/settings",
+  // },
+  // {
+  //   name: "Inbox",
+  //   icon: <FiMail />,
+  //   url: "/inbox",
+  // },
 ];

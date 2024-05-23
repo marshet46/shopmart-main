@@ -33,6 +33,7 @@ import {
   User,
   Withdraw,
   SellOrder,
+  AddCompany,
 
 } from "./pages";
 import Footer from "./components/common/Footer";
@@ -64,7 +65,8 @@ function App() {
             }}
           >
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+             <Route path="/" element={<Dashboard />} />
+             <Route path="/frontend" element={<Dashboard />} />
               <Route path="/products/add" element={<AddProduct />} />
               <Route path="/stocks" element={<Stocks />} />
               <Route path="/companies" element={<CompanyList />} />
@@ -74,7 +76,7 @@ function App() {
               <Route path="/users" element={<User/>} />
               <Route path="/withdraws" element={<Withdraw/>} />
               <Route path="/sells" element={<SellOrder/>} />
-
+              <Route path="/add" element={<AddCompany/>} />
 
               <Route path="/products/:id" element={<SingleProduct />} />
               <Route path="/products/categories" element={<ProductCategories />} />

@@ -6,6 +6,7 @@ import dashboardReducer from './slice/dashbaordSlice'; // Corrected import path
 import dashboardDataReducer from './slice/dataSlice';
 import stockReducer from './slice/stockSlice';
 import companyReducer from './slice/companySlice';
+import companyLogoReducer from './slice/uploadCampany';
 import newsReducer from './slice/newsSlice';
 import depostsReducer from './slice/depositSlice';
 import orderReducer from './slice/OrderSlice';
@@ -26,6 +27,7 @@ const store = configureStore({
     users: userReducer,
     withdraws: withdrawReducer,
     sellStocks: sellStockReducer,
+    company: companyLogoReducer,
 
   }
 });

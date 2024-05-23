@@ -1,6 +1,7 @@
 export { default as Dashboard } from "./Dashboard";
 export { default as Stocks } from "./Stocks";
 export { default as CompanyList } from "./Company";
+export { default as AddCompany } from "./addCompany";
 export { default as News } from "./News";
 export { default as Deposits } from "./Deposit";
 export { default as StockOrder } from "./StockOrders";

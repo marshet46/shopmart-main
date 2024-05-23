@@ -1,7 +1,6 @@
-# Enable Rewrite Engine
 RewriteEngine On
 
-# Serve index.html for all routes except existing files or directories
+# Redirect all requests to index.html except for files and directories that exist
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /index.html [L]
+RewriteRule ^ index.html [L]

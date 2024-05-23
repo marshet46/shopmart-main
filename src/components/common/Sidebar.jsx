@@ -3,12 +3,13 @@ import React from "react";
 import { links } from "../../data/links";
 import SidebarItem from "./SidebarItem";
 import SidebarItemCollapse from "./SidebarItemCollapse";
+import logo from "./logo.png";
 
 const Sidebar = ({ window, sideBarWidth, mobileOpen, handleDrawerToggle }) => {
   const drawer = (
     <div>
       <Toolbar>
-        <img src="/logo.png" alt="Logo" width="40" />
+      <img src={logo} alt="Logo" width="40" />
         <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2 }}>
           Aksion
         </Typography>

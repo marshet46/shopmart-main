@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchStocks, fetchStockById, deleteStock, updateStock, addStock, setSelectedStock } from '../redux/slice/stockSlice';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, TablePagination, TableSortLabel, Button, Modal, FormControl, InputLabel, Input, FormHelperText, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar } from '@mui/material';
+import {
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, TablePagination, TableSortLabel, Button, Modal,
+  FormControl, InputLabel, FormHelperText, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Select, MenuItem
+} from '@mui/material';
 import { FiEye, FiTrash } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
- 
-const Stocks = () => {
 
+const Stocks = () => {
   const dispatch = useDispatch();
   const [selectedStock, setSelectedStockState] = useState({
     symbol: '',
     currentPrice: '',
     marketCap: '',
     dividendYield: '',
-    description: ''
+    description: '',
+    companyId: '',
+    isTrending: ''
   });
   const [editMode, setEditMode] = useState(false);
   const [registrationMode, setRegistrationMode] = useState(false);
@@ -26,6 +31,7 @@ const Stocks = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [companies, setCompanies] = useState([]);
   const stocks = useSelector((state) => state.stocks.stocks);
   const selectedStockState = useSelector((state) => state.stocks.selectedStock);
   const status = useSelector((state) => state.stocks.status);
@@ -43,6 +49,16 @@ const Stocks = () => {
       setEditMode(false);
     }
   }, [selectedStockState]);
+
+  useEffect(() => {
+    axios.get('https://aksion.abyssiniasoftware.com/api/companies')
+      .then(response => {
+        setCompanies(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the companies!', error);
+      });
+  }, []);
 
   const handleDelete = (id) => {
     setDeleteDialogOpen(true);
@@ -128,18 +144,21 @@ const Stocks = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+
   if (status === 'loading') {
- 
-    return  <div style={{ padding: '100px',color:'red' }}>
-    <div style={{alignContent:'center',fontSize:'100px'}}>Loading... please wait!</div>;
-</div>
+    return (
+      <div style={{ padding: '100px', color: 'red' }}>
+        <div style={{ alignContent: 'center', fontSize: '100px' }}>Loading... please wait!</div>
+      </div>
+    );
   }
 
   if (status === 'failed') {
-   return  <div style={{ padding: '100px',color:'red' }}>
-    <div style={{alignContent:'center',fontSize:'100px'}}>failed to load reload again</div>;
-</div>
-
+    return (
+      <div style={{ padding: '100px', color: 'red' }}>
+        <div style={{ alignContent: 'center', fontSize: '100px' }}>Failed to load. Reload again.</div>
+      </div>
+    );
   }
 
   return (
@@ -167,9 +186,7 @@ const Stocks = () => {
                 >
                   CurrentPrice
                 </TableSortLabel>
-                
               </TableCell>
-
               <TableCell>
                 <TableSortLabel
                   active={sortColumn === 'marketCap'}
@@ -178,7 +195,6 @@ const Stocks = () => {
                 >
                   Capital
                 </TableSortLabel>
-                
               </TableCell>
               <TableCell>
                 <TableSortLabel
@@ -186,11 +202,10 @@ const Stocks = () => {
                   direction={sortDirection}
                   onClick={() => sortStocks('dividendYield')}
                 >
-                  Share earning
+                  Share Earning
                 </TableSortLabel>
-                
               </TableCell>
-              
+             
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -243,21 +258,21 @@ const Stocks = () => {
                 margin="normal"
               />
               <TextField
-                label="CurrentPrice"
+                label="Current Price"
                 value={selectedStock.currentPrice}
                 onChange={(e) => setSelectedStockState({ ...selectedStock, currentPrice: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="marcketCap"
+                label="Market Cap"
                 value={selectedStock.marketCap}
                 onChange={(e) => setSelectedStockState({ ...selectedStock, marketCap: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="dividendYield"
+                label="Dividend Yield"
                 value={selectedStock.dividendYield}
                 onChange={(e) => setSelectedStockState({ ...selectedStock, dividendYield: e.target.value })}
                 fullWidth
@@ -271,6 +286,29 @@ const Stocks = () => {
                 margin="normal"
                 multiline
               />
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="companyId-label">Company</InputLabel>
+                <Select
+                  labelId="companyId-label"
+                  value={selectedStock.companyId}
+                  onChange={(e) => setSelectedStockState({ ...selectedStock, companyId: e.target.value })}
+                >
+                  {companies.map((company) => (
+                    <MenuItem key={company.id} value={company.id}>{company.name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="isTrending-label">Is Trending</InputLabel>
+                <Select
+                  labelId="isTrending-label"
+                  value={selectedStock.isTrending}
+                  onChange={(e) => setSelectedStockState({ ...selectedStock, isTrending: e.target.value === 'true' })}
+                >
+                  <MenuItem value="true">Trending</MenuItem>
+                  <MenuItem value="false">Not Trending</MenuItem>
+                </Select>
+              </FormControl>
               <Button onClick={handleSave} variant="contained" color="primary" style={{ marginRight: '10px' }}>Save</Button>
               <Button onClick={handleCancel} variant="contained" color="secondary">Cancel</Button>
             </div>
@@ -286,21 +324,21 @@ const Stocks = () => {
                 margin="normal"
               />
               <TextField
-                label="Stock CurrentPrice"
+                label="Stock Current Price"
                 value={selectedStock.currentPrice}
                 onChange={(e) => setSelectedStockState({ ...selectedStock, currentPrice: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="marcketCap"
+                label="Market Cap"
                 value={selectedStock.marketCap}
                 onChange={(e) => setSelectedStockState({ ...selectedStock, marketCap: e.target.value })}
                 fullWidth
                 margin="normal"
               />
               <TextField
-                label="dividendYield"
+                label="Dividend Yield"
                 value={selectedStock.dividendYield}
                 onChange={(e) => setSelectedStockState({ ...selectedStock, dividendYield: e.target.value })}
                 fullWidth
@@ -314,6 +352,29 @@ const Stocks = () => {
                 margin="normal"
                 multiline
               />
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="companyId-label">Company</InputLabel>
+                <Select
+                  labelId="companyId-label"
+                  value={selectedStock.companyId}
+                  onChange={(e) => setSelectedStockState({ ...selectedStock, companyId: e.target.value })}
+                >
+                  {companies.map((company) => (
+                    <MenuItem key={company.id} value={company.id}>{company.name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="isTrending-label">Is Trending</InputLabel>
+                <Select
+                  labelId="isTrending-label"
+                  value={selectedStock.isTrending}
+                  onChange={(e) => setSelectedStockState({ ...selectedStock, isTrending: e.target.value === 'true' })}
+                >
+                  <MenuItem value="true">Trending</MenuItem>
+                  <MenuItem value="false">Not Trending</MenuItem>
+                </Select>
+              </FormControl>
               <Button onClick={handleRegisterSave} variant="contained" color="primary" style={{ marginRight: '10px' }}>Save</Button>
               <Button onClick={handleRegisterCancel} variant="contained" color="secondary">Cancel</Button>
             </div>
@@ -337,10 +398,12 @@ const Stocks = () => {
         <DialogContent>
           <DialogContentText>
             <p>Symbol: {selectedStockState?.symbol}</p>
-            <p>CurrentPrice: {selectedStockState?.currentPrice}</p>
-            <p>marcketCap: {selectedStockState?.marketCap}</p>
-            <p>dividendYield: {selectedStockState?.dividendYield}</p>
+            <p>Current Price: {selectedStockState?.currentPrice}</p>
+            <p>Market Cap: {selectedStockState?.marketCap}</p>
+            <p>Dividend Yield: {selectedStockState?.dividendYield}</p>
             <p>Description: {selectedStockState?.description}</p>
+            <p>Company ID: {selectedStockState?.companyId}</p>
+            <p>Is Trending: {selectedStockState?.isTrending ? 'Trending' : 'Not Trending'}</p>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -348,13 +411,12 @@ const Stocks = () => {
         </DialogActions>
       </Dialog>
       <Snackbar
-  open={snackbarOpen}
-  autoHideDuration={6000}
-  onClose={handleSnackbarClose}
-  message={snackbarMessage}
-  sx={{ width: '500px' }} // Adjust the width to your desired size
-/>
-
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        message={snackbarMessage}
+        sx={{ width: '500px' }} // Adjust the width to your desired size
+      />
     </div>
   );
 };
